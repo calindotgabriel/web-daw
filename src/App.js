@@ -6,8 +6,15 @@ import Tone from 'tone';
 
 var synth = new Tone.Synth().toMaster();
 var loop = new Tone.Loop(function(time) {
-      synth.triggerAttackRelease("C4", "8n");
-    }, "8n").start(0);
+      synth.triggerAttackRelease("C4", "4n");
+    }, "2n");
+
+var seq = new Tone.Sequence(function(time, note){
+      console.log(note, ", ", time, "  ");
+      synth.triggerAttackRelease(note, "4n")
+    //straight quater notes
+    }, ["C4", "E4", "G4", "A4"], "4n")
+    .start(0);
 
 class App extends Component {
   render() {
