@@ -3,3 +3,27 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.cell {
+  float: left;
+  padding: 4px;
+  /* background-color: '#D7DCF2'; */
+  background-color: grey;
+  margin: 2px;
+  color: white;
+  border: 1px solid black;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.label {
+  float: left;
+  margin-right: 4px;  
+  position: relative;
+  top: 8px;
+}
+
+.sequence {
+  margin-left: 50px;
+  margin-top: 50px;
+}
