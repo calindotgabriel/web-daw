@@ -15,7 +15,7 @@ var seq = new Tone.Sequence(function(time, note){
       console.log(note, ", ", time, "  ");
       synth.triggerAttackRelease(note, "4n")
     //straight quater notes
-    }, ["C4", "D4", "G4", "A4"], "2n")
+    }, ["C1", "C2", "C3", "C4"], "16n")
     .start(0);
 
   const drums = [ 'kick', 'clap', 'snare' ]; 
