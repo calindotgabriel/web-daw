@@ -27,3 +27,21 @@ body {
   margin-left: 50px;
   margin-top: 50px;
 }
+
+.containerBox {
+  margin: 15px;
+  background: rgb(163, 163, 163);
+  overflow: auto;
+  text-align: left;
+}
+
+.controls i {
+  margin: .2em;
+  font-size: 27px;
+  cursor: default;
+}
+
+.sequencer {
+  overflow: auto;
+  /* display: inline-block; */
+}
