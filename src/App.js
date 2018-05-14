@@ -6,6 +6,8 @@ import Cell from './components/Cell'
 
 import Tone from 'tone';
 
+let log = console.log;
+
 
 Tone.Transport.bpm.value = 122;
 const sequence = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -38,14 +40,17 @@ var seq = new Tone.Sequence(function(time, note){
   }, ["C1", "C1", "F2", "C4", "f2", "c3"], "8n")
 // .start(0);
 
-const drums = {
+const drumsPaths = {
    "Kick": "./res/kick.wav",
   //  "Clap": "./res/clap.wav"
+}
+const drumsActivations = {
+  "Kick": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
 
 //setup a polyphonic sampler
-var keys = new Tone.Players(drums, {
+var keys = new Tone.Players(drumsPaths, {
     "volume" : -10,
     "fadeOut" : "64n",
   }).toMaster();
@@ -87,7 +92,10 @@ class App extends Component {
     );
   }
 
-  onClickCell(e) {
+  onClickCell(colIndex) {
+      log("colndex:", colIndex)
+      let seq = drumsActivations.get("Kick")
+      seq[colIndex] = !seq[colIndex];
   }
 
   startPlay() {
