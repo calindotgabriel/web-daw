@@ -36,31 +36,10 @@ var keys = new Tone.Players(drumPaths, {
 
 
 var loop = new Tone.Sequence(function(time, col){
-  // var column = matrix1.matrix[col];
-  // for (var i = 0; i < 4; i++){
-  //   if (column[i] === 1){
-  //     //slightly randomized velocities
-  //     // var vel = Math.random() * 0.5 + 0.5;
-  //     var vel = 1;
-  //     keys.get(noteNames[i]).start(time, 0, "32n", 0, vel);
-  //   }
-  // }
-  console.log("loop:", time, col);
-  // if (col % 4 == 0 || col % 7 == 0) {
-  //   keys.get('Kick').start(time, 0, "4n");
-  // }
+  // console.log("loop:", time, col);
   if (drums[0].state[col])
     keys.get('Kick').start(time, 0, "4n");
-
 }, sequence, "16n");
-
-var seq = new Tone.Sequence(function(time, note){
-      // console.log(note, ", ", time, "  "); 
-      // synth.triggerAttackRelease(note, "4n")
-    //straight quater notes
-  }, ["C1", "C1", "F2", "C4", "f2", "c3"], "8n")
-// .start(0);
-
 
 class App extends Component {
   constructor(props) {
@@ -71,7 +50,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          {/* <img src={logo} className="App-logo" alt="logo" /> */}
         </header>
         {/* <button onClick={() => { this.startPlay() }}>Play</button>
         <button onClick={() => { this.stopPlay() }}>Stop</button> */}
@@ -84,7 +63,7 @@ class App extends Component {
             <div className="col-md-2">
               Kick
             </div>
-            <div className="col-md-10">
+            <div className="col-md-10 boxes">
             {sequence.map((step, i) => { 
               return <Cell i={i} onClick={this.onClickCell}></Cell>
             })}
