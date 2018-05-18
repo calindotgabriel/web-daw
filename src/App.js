@@ -14,14 +14,6 @@ const sequence = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 // 16 * 16 sixteen notes = 1 measure
 // 2 * 8 eighteen notes = 2 measures ( pace slowed ) 
 
-const drumsPaths = {
-  "Kick": "./res/kick.wav",
- //  "Clap": "./res/clap.wav"
-}
-const drumsActivations = {
- "Kick": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-}
-
 const kickDrum = {
   name: "Kick",
   path: "./res/kick.wav",
@@ -30,15 +22,14 @@ const kickDrum = {
 
 const drums = [ kickDrum, ]
 
-let drumPathss = drums.reduce(function(map, d) {
+let drumPaths = drums.reduce(function(map, d) {
   map[d.name] = d.path;
   return map;
 }, {});
 
-log(drumPathss)
 
 //setup a polyphonic sampler
-var keys = new Tone.Players(drumPathss, {
+var keys = new Tone.Players(drumPaths, {
   "volume" : -10,
   "fadeOut" : "64n",
 }).toMaster();
@@ -55,9 +46,12 @@ var loop = new Tone.Sequence(function(time, col){
   //   }
   // }
   console.log("loop:", time, col);
-  if (col % 4 == 0 || col % 7 == 0) {
+  // if (col % 4 == 0 || col % 7 == 0) {
+  //   keys.get('Kick').start(time, 0, "4n");
+  // }
+  if (drums[0].state[col])
     keys.get('Kick').start(time, 0, "4n");
-  }
+
 }, sequence, "16n");
 
 var seq = new Tone.Sequence(function(time, note){
@@ -106,8 +100,14 @@ class App extends Component {
 
   onClickCell(colIndex) {
       log("colndex:", colIndex)
-      let seq = drumsActivations.get("Kick")
-      // seq[colIndex] = !seq[colIndex];
+      // debugger;
+      let kick = drums[0].state;
+      kick[colIndex] = !kick[colIndex];
+      log(kick)
+  }
+
+  drumByName() {
+
   }
 
   startPlay() {
