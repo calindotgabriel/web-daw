@@ -11,11 +11,38 @@ let log = console.log;
 
 Tone.Transport.bpm.value = 122;
 const sequence = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+// 16 * 16 sixteen notes = 1 measure
+// 2 * 8 eighteen notes = 2 measures ( pace slowed ) 
 
-// var synth = new Tone.Synth().toMaster();
-// var loop = new Tone.Loop(function(time) {
-//       synth.triggerAttackRelease("C4", "4n");
-//     }, "2n");
+const drumsPaths = {
+  "Kick": "./res/kick.wav",
+ //  "Clap": "./res/clap.wav"
+}
+const drumsActivations = {
+ "Kick": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}
+
+const kickDrum = {
+  name: "Kick",
+  path: "./res/kick.wav",
+  state: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}
+
+const drums = [ kickDrum, ]
+
+let drumPathss = drums.reduce(function(map, d) {
+  map[d.name] = d.path;
+  return map;
+}, {});
+
+log(drumPathss)
+
+//setup a polyphonic sampler
+var keys = new Tone.Players(drumPathss, {
+  "volume" : -10,
+  "fadeOut" : "64n",
+}).toMaster();
+
 
 var loop = new Tone.Sequence(function(time, col){
   // var column = matrix1.matrix[col];
@@ -28,8 +55,8 @@ var loop = new Tone.Sequence(function(time, col){
   //   }
   // }
   console.log("loop:", time, col);
-  if (col % 4 == 0) {
-    keys.get('Kick').start(time);
+  if (col % 4 == 0 || col % 7 == 0) {
+    keys.get('Kick').start(time, 0, "4n");
   }
 }, sequence, "16n");
 
@@ -39,21 +66,6 @@ var seq = new Tone.Sequence(function(time, note){
     //straight quater notes
   }, ["C1", "C1", "F2", "C4", "f2", "c3"], "8n")
 // .start(0);
-
-const drumsPaths = {
-   "Kick": "./res/kick.wav",
-  //  "Clap": "./res/clap.wav"
-}
-const drumsActivations = {
-  "Kick": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-}
-
-
-//setup a polyphonic sampler
-var keys = new Tone.Players(drumsPaths, {
-    "volume" : -10,
-    "fadeOut" : "64n",
-  }).toMaster();
 
 
 class App extends Component {
@@ -95,7 +107,7 @@ class App extends Component {
   onClickCell(colIndex) {
       log("colndex:", colIndex)
       let seq = drumsActivations.get("Kick")
-      seq[colIndex] = !seq[colIndex];
+      // seq[colIndex] = !seq[colIndex];
   }
 
   startPlay() {
