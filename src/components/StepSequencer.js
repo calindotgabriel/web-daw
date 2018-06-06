@@ -2,7 +2,7 @@ import React, { Component } from 'react'
  
 import { sequence } from './../constants'
 
-import Cell from './Cell'
+import Drum from './Drum'
 
 import Tone from 'tone';
 
@@ -13,7 +13,7 @@ const kickDrum = {
     path: "./res/kick.wav",
     pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   }
-const drums = [ kickDrum, ]
+export const drums = [ kickDrum, ]
 
 const drumPaths = drums.reduce(function(map, d) {
     map[d.name] = d.path;
@@ -35,7 +35,7 @@ var loop = new Tone.Sequence(function(time, col){
  export default class StepSequencer extends Component {
     constructor(props) {
         super(props);        
-        this.onClickCell = this.onClickCell.bind(this);
+        // this.onClickCell = this.onClickCell.bind(this);
     }
    render() {
      return (
@@ -45,18 +45,11 @@ var loop = new Tone.Sequence(function(time, col){
               <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
               <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
           </div>
-          <div className="row sequencer">
-            <div className="col-md-2">
-              Kick
-            </div>
-            <div className="col-md-10 boxes">
-            {sequence.map((step, i) => { 
-              return <Cell i={i} onClick={this.onClickCell}></Cell>
-            })}
-            </div> 
+          <div className="sequencer">
+            <Drum name="Kick"/>
+         </div> 
           </div>
         <div/>
-       </div>
        </div>
      )
    }
@@ -71,12 +64,5 @@ var loop = new Tone.Sequence(function(time, col){
     loop.stop()
     }
 
-    onClickCell(colIndex) {
-        log("colndex:", colIndex)
-        // debugger;
-        let kick = drums[0].pattern;
-        kick[colIndex] = !kick[colIndex];
-        log(kick)
-    }
  }
  

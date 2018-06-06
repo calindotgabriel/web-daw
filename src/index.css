@@ -44,7 +44,7 @@ body {
 }
 
 .sequencer {
-  overflow: auto;
+  overflow: hidden;
   /* display: inline-block; */
 }
 
