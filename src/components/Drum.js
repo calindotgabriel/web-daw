@@ -19,10 +19,10 @@ export class Drum extends Component {
   render() {
     return (
       <div className="row">
-          <div className="col-lg-2">
+          <div className="col-lg-1 drum-label">
               {this.props.name}
         </div>
-        <div className="col-lg-10 boxes">
+        <div className="col-lg-11 boxes">
         {sequence.map((step, i) => { 
             return <Cell i={i} key={i} onClick={this.onClickCell}></Cell>
             })}

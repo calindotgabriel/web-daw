@@ -23,7 +23,12 @@ const hhat = {
     path: "./res/chhat.wav",
     pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
-export const drums = [ kick, clap, hhat]
+const snare = {
+    name: "Snare",
+    path: "./res/snare.wav",
+    pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}
+export const drums = [ kick, clap, hhat, snare ]
 
 const drumPaths = drums.reduce(function(map, d) {
     map[d.name] = d.path;
@@ -58,19 +63,17 @@ var loop = new Tone.Sequence(function(time, col){
     }
    render() {
      return (
-       <div>
-          <div className="container containerBox"> 
-          <div className="row controls">
-              <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
-              <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
-          </div>
-          <div className="sequencer">
-            {/* <Drum name="Kick"/>
-            <Drum name="Clap"/> */}
-            {drums.map((d,i) => {
-              return <Drum key={d.name} name={d.name}/>
-            })}
-         </div> 
+       <div className="container-fluid">
+          <div className="containerBox"> 
+            <div className="row controls">
+                <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
+                <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
+            </div>
+            <div className="sequencer">
+              {drums.map((d,i) => {
+                return <Drum key={d.name} name={d.name} pattern={d.pattern}/>
+              })}
+            </div> 
           </div>
         <div/>
        </div>

@@ -8,6 +8,7 @@ import Tone from 'tone';
 
 import { sequence } from "./constants";
 
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 let log = console.log;
 
@@ -22,11 +23,26 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App">
+      <div className="">
         <header className="App-header">
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
+          <h2 className="title">Rhytmicinno SoundBox</h2>
         </header>
-        <StepSequencer></StepSequencer>
+        <StepSequencer/>
+
+        <Tabs className="nav">
+          <TabList>
+            <Tab className="nav-item">Drums</Tab>
+            <Tab className="nav-item">Bass</Tab>
+          </TabList>
+
+          <TabPanel>
+            <h2>Drums here</h2>
+          </TabPanel>
+          <TabPanel>
+            <h2>BASS here</h2>
+          </TabPanel>
+        </Tabs>
       </div>
     );
   }
