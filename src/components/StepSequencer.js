@@ -25,16 +25,18 @@ const drumPaths = drums.reduce(function(map, d) {
     return map;
   }, {});
 
-log(drumPaths)
-  
-const keys = new Tone.Players(drumPaths, () => {
+const gain = new Tone.Gain(0.3)  
+const drumSampler = new Tone.Players(drumPaths, () => {
   log('loaded drums!')
-}).toMaster();
+})
+drumSampler.connect(gain)
+gain.toMaster();
+
 
 var loop = new Tone.Sequence(function(time, col){
     // console.log("loop:", time, col);
     drums.forEach(d => {
-        if (d.pattern[col]) keys.get(d.name).start(time, 0, "8n")
+        if (d.pattern[col]) drumSampler.get(d.name).start(time, 0, "8n")
     })
     // for (let i = 0 ; i < drums.length ; i ++) {
     //    if (drums[i]) keys[i].start(time, 0, "4n")
