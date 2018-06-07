@@ -30,36 +30,29 @@ const snare = {
 }
 export const drums = [ kick, clap, hhat, snare ]
 
-const drumPaths = drums.reduce(function(map, d) {
+const drumPaths = drums.reduce((map, d) => {
     map[d.name] = d.path;
     return map;
   }, {});
 
 const gain = new Tone.Gain(0.3)  
-const drumSampler = new Tone.Players(drumPaths, () => {
-  log('loaded drums!')
-})
+const drumSampler = new Tone.Players(drumPaths, () => { log('loaded drums!') })
 drumSampler.connect(gain)
 gain.toMaster();
-
-
-var loop = new Tone.Sequence(function(time, col){
-    // console.log("loop:", time, col);
-    drums.forEach(d => {
-        if (d.pattern[col]) drumSampler.get(d.name).start(time, 0, "8n")
-    })
-    // for (let i = 0 ; i < drums.length ; i ++) {
-    //    if (drums[i]) keys[i].start(time, 0, "4n")
-    // }
-    // if (drums[0].pattern[col])
-    //   keys.get('Kick').start(time, 0, "4n");
-  }, sequence, "16n");
 
 
  export default class StepSequencer extends Component {
     constructor(props) {
         super(props);        
-        // this.onClickCell = this.onClickCell.bind(this);
+        this.state = { drumsPatterns: Array(drums.length).fill().map(() => Array(sequence.length).fill(0))}
+        this.loop = new Tone.Sequence((time, col) => {
+          for (let i = 0 ; i < drums.length ; i ++) {
+             if (this.state.drumsPatterns[i][col]) {
+                drumSampler.get(drums[i].name).start(time, 0, "16n")
+             }
+          }
+      }, sequence, "16n");
+      this.onHit = this.onHit.bind(this);
     }
    render() {
      return (
@@ -71,7 +64,7 @@ var loop = new Tone.Sequence(function(time, col){
             </div>
             <div className="sequencer">
               {drums.map((d,i) => {
-                return <Drum key={d.name} name={d.name} pattern={d.pattern}/>
+                return <Drum i={i} key={d.name} name={d.name} onHit={this.onHit}/>
               })}
             </div> 
           </div>
@@ -80,14 +73,21 @@ var loop = new Tone.Sequence(function(time, col){
      )
    }
 
+   onHit(l, c) {
+     log('onHit: ', l, ' ', c)
+     let dp = this.state.drumsPatterns;
+     dp[l][c] = !dp[l][c]
+     this.setState(dp)
+   }
+
    startPlay() {
     Tone.Transport.start()
-    loop.start()
+    this.loop.start()
     }
 
   stopPlay() {
     // Tone.Transport.stop() 
-    loop.stop()
+    this.loop.stop()
     }
 
  }

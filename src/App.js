@@ -29,20 +29,21 @@ class App extends Component {
           <h2 className="title">Rhytmicinno SoundBox</h2>
         </header>
         <StepSequencer/>
+       {
+        // <Tabs className="nav">
+        //   <TabList>
+        //     <Tab className="nav-item">Drums</Tab>
+        //     <Tab className="nav-item">Bass</Tab>
+        //   </TabList>
 
-        <Tabs className="nav">
-          <TabList>
-            <Tab className="nav-item">Drums</Tab>
-            <Tab className="nav-item">Bass</Tab>
-          </TabList>
-
-          <TabPanel>
-            <h2>Drums here</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2>BASS here</h2>
-          </TabPanel>
-        </Tabs>
+        //   <TabPanel>
+        //     <h2>Drums here</h2>
+        //   </TabPanel>
+        //   <TabPanel>
+        //     <h2>BASS here</h2>
+        //   </TabPanel>
+        // </Tabs>
+       }
       </div>
     );
   }

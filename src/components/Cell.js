@@ -12,19 +12,18 @@ class Cell extends Component {
     constructor(props) {
         super(props);
         this.state = {marked: false};
-        this.onClick = this.onClick.bind(this);
+        this.onToggle = this.onToggle.bind(this);
     } 
     render() {  // onToggle
-        const markedCell = <div onClick={this.onClick} className="cell active" 
+        const markedCell = <div onClick={this.onToggle} className="cell active" 
             style={styleToggled}>{this.props.i + 1}</div>;
-        const unmarkedCell = <div onClick={this.onClick} className="cell" 
+        const unmarkedCell = <div onClick={this.onToggle} className="cell" 
             style={styleUntoggled}></div>;
         return this.state.marked ? markedCell : unmarkedCell
                
     }
-    onClick(e) {
-        log('onclick Cell')
-        this.props.onClick(this.props.i);
+    onToggle(e) {
+        this.props.onToggle(this.props.i);
         this.setState({marked: !this.state.marked});
     }
 }
