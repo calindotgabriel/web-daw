@@ -5,6 +5,10 @@ import { sequence } from './../constants'
 
 import { drums } from "./StepSequencer";
 
+function drumByName(name) {
+    return drums.find(d => d.name == name)
+}
+
 export class Drum extends Component {
     constructor(props) {
         super(props);        
@@ -19,7 +23,7 @@ export class Drum extends Component {
         </div>
         <div className="col-lg-10 boxes">
         {sequence.map((step, i) => { 
-            return <Cell i={i}  onClick={this.onClickCell}></Cell>
+            return <Cell i={i} key={i} onClick={this.onClickCell}></Cell>
             })}
         </div>
       </div>
@@ -30,8 +34,8 @@ export class Drum extends Component {
   onClickCell(colIndex) {
     // log("colndex:", colIndex)
     // debugger;
-    let kick = drums[0].pattern;
-    kick[colIndex] = !kick[colIndex];
+    let drum = drumByName(this.props.name).pattern;
+    drum[colIndex] = !drum[colIndex];
     // log(kick)
 }
 }

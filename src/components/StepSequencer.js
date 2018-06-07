@@ -8,27 +8,39 @@ import Tone from 'tone';
 
 let log = console.log;
 
-const kickDrum = {
+const kick = {
     name: "Kick",
     path: "./res/kick.wav",
     pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   }
-export const drums = [ kickDrum, ]
+const clap = {
+    name: "Clap",
+    path: "./res/clap2.wav",
+    pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}
+export const drums = [ kick, clap]
 
 const drumPaths = drums.reduce(function(map, d) {
     map[d.name] = d.path;
     return map;
   }, {});
+
+log(drumPaths)
   
-const keys = new Tone.Players(drumPaths, {
-    "volume" : -10,
-    "fadeOut" : "64n",
-    }).toMaster();
+const keys = new Tone.Players(drumPaths, () => {
+  log('loaded drums!')
+}).toMaster();
 
 var loop = new Tone.Sequence(function(time, col){
     // console.log("loop:", time, col);
-    if (drums[0].pattern[col])
-      keys.get('Kick').start(time, 0, "4n");
+    drums.forEach(d => {
+        if (d.pattern[col]) keys.get(d.name).start(time, 0, "8n")
+    })
+    // for (let i = 0 ; i < drums.length ; i ++) {
+    //    if (drums[i]) keys[i].start(time, 0, "4n")
+    // }
+    // if (drums[0].pattern[col])
+    //   keys.get('Kick').start(time, 0, "4n");
   }, sequence, "16n");
 
 
@@ -46,7 +58,11 @@ var loop = new Tone.Sequence(function(time, col){
               <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
           </div>
           <div className="sequencer">
-            <Drum name="Kick"/>
+            {/* <Drum name="Kick"/>
+            <Drum name="Clap"/> */}
+            {drums.map((d,i) => {
+              return <Drum key={d.name} name={d.name}/>
+            })}
          </div> 
           </div>
         <div/>
