@@ -12,13 +12,18 @@ const kick = {
     name: "Kick",
     path: "./res/kick.wav",
     pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  }
+}
 const clap = {
     name: "Clap",
     path: "./res/clap2.wav",
     pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
-export const drums = [ kick, clap]
+const hhat = {
+    name: "CHat",
+    path: "./res/chhat.wav",
+    pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}
+export const drums = [ kick, clap, hhat]
 
 const drumPaths = drums.reduce(function(map, d) {
     map[d.name] = d.path;

@@ -56,3 +56,7 @@ body {
 .cell-no {
   position: relative;
 }
+
+.boxes div:nth-child(4n+1) {
+  margin-left: .4em;
+}

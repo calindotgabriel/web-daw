@@ -13,6 +13,7 @@ export class Drum extends Component {
     constructor(props) {
         super(props);        
         this.onClickCell = this.onClickCell.bind(this);
+        console.log('ctor Drum: ', this.props.name)
     }
 
   render() {
