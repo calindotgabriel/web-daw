@@ -8,6 +8,7 @@ export class Drum extends Component {
     constructor(props) {
         super(props);        
         this.onToggleCell = this.onToggleCell.bind(this);
+        this.onViewing = () => { }
     }
 
   render() {
@@ -17,8 +18,9 @@ export class Drum extends Component {
               {this.props.name}
         </div>
         <div className="col-lg-11 boxes">
-        {Array(16).fill(0).map((step, j) => { 
-            return <Cell i={j} key={j} onToggle={this.onToggleCell}></Cell>
+        {Array(16).fill(0).map((j, step) => { 
+            // debugger;
+            return <Cell i={step} key={step} onToggle={this.onToggleCell} onViewing={this.onViewing}></Cell>
             })}
         </div>
       </div>

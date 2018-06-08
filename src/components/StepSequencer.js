@@ -51,7 +51,7 @@ gain.toMaster();
                 drumSampler.get(drums[i].name).start(time, 0, "16n")
              }
             //  log('col: ', col)
-
+              // should call here
           }
       }, sequence, "16n");
       this.onHit = this.onHit.bind(this);
