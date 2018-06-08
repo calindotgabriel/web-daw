@@ -62,10 +62,30 @@ gain.toMaster();
                 <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
                 <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
             </div>
-            <div className="sequencer">
-              {drums.map((d,i) => {
-                return <Drum i={i} key={d.name} name={d.name} onHit={this.onHit}/>
-              })}
+            <div className="row sequencer">
+              <ul className="nav nav-pills container instruments" role="tablist">
+                <li className="nav-item"><a data-toggle="pill"
+                  href="#drums" className="nav-link active" aria-selected="true">DRUMS</a></li>
+                <li className="nav-item"><a data-toggle="pill"
+                  href="#bass" className="nav-link" aria-selected="false">BASS</a></li>
+                <li className="nav-item"><a data-toggle="pill" 
+                  href="#lead" className="nav-link" aria-selected="false">LEAD</a></li>
+              </ul>
+              <div className="tab-content">
+                <div className="tab pane fade show active" id="drums" role="tabpanel" aria-labelledby="drums">
+                  {drums.map((d,i) => {
+                  return <Drum i={i} key={d.name} name={d.name} onHit={this.onHit}/>
+                })}
+                </div>
+                <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
+                  bass
+                </div>
+                <div className="tab pane fade" id="lead" role="tabpanel" aria-labelledby="lead">
+                  lead
+                </div>
+
+              </div>
+              
             </div> 
           </div>
         <div/>

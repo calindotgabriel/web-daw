@@ -56,6 +56,7 @@ body {
 .sequencer {
   overflow: hidden;
   /* display: inline-block; */
+  padding-left: 1em;
 }
 
 .numbers {
@@ -75,10 +76,29 @@ body {
   text-align: left;
 }
 
-.active {
-  background: #D66761;
+.hit {
+  /* background: #D66761; */
+  background: #417378;
+  /* background: black; */
 }
 
 .drum-label {
   text-align: right;
+}
+
+.instruments {
+  margin-bottom: 1em;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+	color: #fff;
+	/* background-color: #417378; */
+	background-color: #417378;
+}
+.nav-pills .nav-link {
+	color: black;
+}
+
+.fade:not(.show) {
+  display: none;
 }

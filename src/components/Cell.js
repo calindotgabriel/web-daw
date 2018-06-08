@@ -15,7 +15,7 @@ class Cell extends Component {
         this.onToggle = this.onToggle.bind(this);
     } 
     render() {  // onToggle
-        const markedCell = <div onClick={this.onToggle} className="cell active" 
+        const markedCell = <div onClick={this.onToggle} className="cell hit" 
             style={styleToggled}>{this.props.i + 1}</div>;
         const unmarkedCell = <div onClick={this.onToggle} className="cell" 
             style={styleUntoggled}></div>;
