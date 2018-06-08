@@ -55,7 +55,6 @@ body {
 
 .sequencer {
   overflow: hidden;
-  /* display: inline-block; */
   padding-left: 1em;
 }
 
@@ -101,4 +100,8 @@ body {
 
 .fade:not(.show) {
   display: none;
+}
+
+.badge {
+  /* border: 1px solid #417378; */
 }

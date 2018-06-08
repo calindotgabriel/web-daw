@@ -50,6 +50,8 @@ gain.toMaster();
              if (this.state.drumsPatterns[i][col]) {
                 drumSampler.get(drums[i].name).start(time, 0, "16n")
              }
+            //  log('col: ', col)
+
           }
       }, sequence, "16n");
       this.onHit = this.onHit.bind(this);
@@ -59,8 +61,8 @@ gain.toMaster();
        <div className="container-fluid">
           <div className="containerBox"> 
             <div className="row controls">
-                <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
-                <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
+                <i onClick={() => { this.startPlay()}} className="material-icons ">play_arrow</i>
+                <i onClick={() => { this.stopPlay()}} className="material-icons ">stop</i>
             </div>
             <div className="row sequencer">
               <ul className="nav nav-pills container instruments" role="tablist">

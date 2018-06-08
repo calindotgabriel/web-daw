@@ -1,15 +1,8 @@
 import React, { Component } from 'react'
 import Cell from './Cell'
 
-import { sequence } from './../constants'
-
-import { drums } from "./StepSequencer";
-
 let log = console.log;
 
-function drumByName(name) {
-    return drums.find(d => d.name == name)
-}
 
 export class Drum extends Component {
     constructor(props) {
@@ -24,14 +17,13 @@ export class Drum extends Component {
               {this.props.name}
         </div>
         <div className="col-lg-11 boxes">
-        {sequence.map((step, j) => { 
+        {Array(16).fill(0).map((step, j) => { 
             return <Cell i={j} key={j} onToggle={this.onToggleCell}></Cell>
             })}
         </div>
       </div>
     )
   }
-
 
   onToggleCell(rowIndex) {
       this.props.onHit(this.props.i, rowIndex)

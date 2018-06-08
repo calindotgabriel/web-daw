@@ -11,7 +11,7 @@ let log = console.log;
 class Cell extends Component {
     constructor(props) {
         super(props);
-        this.state = {marked: false};
+        this.state = {hit: false};
         this.onToggle = this.onToggle.bind(this);
     } 
     render() {  // onToggle
@@ -19,12 +19,12 @@ class Cell extends Component {
             style={styleToggled}>{this.props.i + 1}</div>;
         const unmarkedCell = <div onClick={this.onToggle} className="cell" 
             style={styleUntoggled}></div>;
-        return this.state.marked ? markedCell : unmarkedCell
+        return this.state.hit ? markedCell : unmarkedCell
                
     }
     onToggle(e) {
         this.props.onToggle(this.props.i);
-        this.setState({marked: !this.state.marked});
+        this.setState({hit: !this.state.hit});
     }
 }
  
