@@ -11,22 +11,18 @@ let log = console.log;
 const kick = {
     name: "Kick",
     path: "./res/kick.wav",
-    pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 const clap = {
     name: "Clap",
     path: "./res/clap2.wav",
-    pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 const hhat = {
     name: "CHat",
     path: "./res/chhat.wav",
-    pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 const snare = {
     name: "Snare",
     path: "./res/snare.wav",
-    pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 // export const drums = [ kick ]
 export const drums = [ kick, clap, hhat, snare ]
@@ -51,6 +47,8 @@ export default class StepSequencer extends Component {
               drumSampler.get(drums[i].name).start(time, 0, "16n")
             }
         }
+        log('col: ', col)
+        this.setState({pbCol: col})
     }, sequence, "16n");
     this.onHit = this.onHit.bind(this);
   }
@@ -74,7 +72,8 @@ export default class StepSequencer extends Component {
             <div className="tab-content">
               <div className="tab pane fade show active" id="drums" role="tabpanel" aria-labelledby="drums">
                 {drums.map((d,i) => {
-                return <Drum i={i} key={d.name} name={d.name} onHit={this.onHit} pattern={this.state.drumsPatterns[i]}/>
+                return <Drum key={d.name} i={i} name={d.name} 
+                  onHit={this.onHit} pattern={this.state.drumsPatterns[i]} pbCol={this.state.pbCol}/>
               })}
               </div>
               <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
@@ -103,7 +102,6 @@ export default class StepSequencer extends Component {
 
   logDrumPatterns() {
     let a = this.state.drumsPatterns;
-    // debugger;
     for (let i = 0 ; i < a.length ; i ++) {
         for (let j = 0 ; j < a[0].length ; j ++) {
             if (a[i][j]) log("hit at ", i, " ", j)
@@ -116,7 +114,7 @@ export default class StepSequencer extends Component {
   this.loop.start()
   }
 
-stopPlay() {
+  stopPlay() {
   // Tone.Transport.stop() 
   this.loop.stop()
   }

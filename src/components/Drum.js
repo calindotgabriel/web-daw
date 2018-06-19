@@ -11,7 +11,6 @@ export class Drum extends Component {
     }
 
   render() {
-    // log('pattern:', this.props.pattern)
     return (
       <div className="row">
           <div className="col-lg-1 drum-label">
@@ -19,7 +18,8 @@ export class Drum extends Component {
         </div>
         <div className="col-lg-11 boxes">
         {Array(16).fill(0).map((j, i) => { 
-            return <Box i={i} key={i} onToggle={this.onToggleBox} active={this.props.pattern[i]}></Box>
+            return <Box i={i} key={i} onToggle={this.onToggleBox} active={this.props.pattern[i]} 
+                        pbCol={this.props.pbCol}></Box>
             })}
         </div>
       </div>

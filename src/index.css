@@ -105,3 +105,7 @@ body {
 .badge {
   /* border: 1px solid #417378; */
 }
+
+.viewing {
+  background-color: #F1DE98;
+}
