@@ -16,18 +16,22 @@ Tone.Transport.bpm.value = BPM;
 const kick = {
     name: "Kick",
     path: "./res/kick.wav",
+    color: 'red'
 }
 const clap = {
     name: "Clap",
     path: "./res/clap2.wav",
+    color: 'orange'
 }
 const hhat = {
     name: "CHat",
     path: "./res/chhat.wav",
+    color: 'green'
 }
 const ohat = {
     name: "OHat",
     path: "./res/ohhat.wav",
+    color: 'blueviolet'
 }
 const snare = {
     name: "Snare",
@@ -42,8 +46,8 @@ const drumPaths = drums.reduce((map, d) => {
   }, {});
 
 const gain = new Tone.Gain(0.35)  
-const drumSampler = new Tone.Players(drumPaths, () => { log('loaded drums!') })
-drumSampler.connect(gain)
+const drumKeys = new Tone.Players(drumPaths, () => { log('loaded drums') })
+drumKeys.connect(gain)
 gain.toMaster();
 
 export default class StepSequencer extends Component {
@@ -53,7 +57,7 @@ export default class StepSequencer extends Component {
       this.loop = new Tone.Sequence((time, col) => {
         for (let i = 0 ; i < drums.length ; i ++) {
             if (this.state.drumsPatterns[i][col]) {
-              drumSampler.get(drums[i].name).start(time, 0, "16n")
+              drumKeys.get(drums[i].name).start(time, 0, "16n")
             }
         }
         log('col: ', col)
@@ -83,7 +87,6 @@ export default class StepSequencer extends Component {
               </div>
           </div>
           
-          
           <div className="row sequencer">
             <ul className="nav nav-pills container instruments" role="tablist">
               <li className="nav-item"><a data-toggle="pill"
@@ -97,7 +100,7 @@ export default class StepSequencer extends Component {
               <div className="tab pane fade show active" id="drums" role="tabpanel" aria-labelledby="drums">
                 {drums.map((d,i) => {
                 return <Drum key={d.name} i={i} name={d.name} 
-                  onHit={this.onHit} pattern={this.state.drumsPatterns[i]} pbCol={this.state.pbCol}/>
+                  onHit={this.onHit} color={d.color} pattern={this.state.drumsPatterns[i]} pbCol={this.state.pbCol}/>
               })}
               </div>
               <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
@@ -108,8 +111,9 @@ export default class StepSequencer extends Component {
               </div>
 
             </div>
-            
           </div> 
+                
+
         </div>
       <div/>
       </div>

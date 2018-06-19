@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 
 let log = console.log;
 
+let colorStyle = (color) => {
+    if (!color) return {}
+    return { 'background-color': color };
+}
+
 class Box extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +17,7 @@ class Box extends Component {
         let pbClass = this.props.pbCol == this.props.i ? 'viewing' : '';
         let hitClass = `cell hit ${pbClass}`
         let unhitClass = `cell ${pbClass}`
-        const hitBox = <div onClick={this.onToggle} className={hitClass}>
+        const hitBox = <div onClick={this.onToggle} style={colorStyle(this.props.color)} className={hitClass}>
             {this.props.i + 1}</div>;
         const unhitBox = <div onClick={this.onToggle} className={unhitClass}></div>;
         return this.props.active ? hitBox : unhitBox
