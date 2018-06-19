@@ -20,12 +20,16 @@ const hhat = {
     name: "CHat",
     path: "./res/chhat.wav",
 }
+const ohat = {
+    name: "OHat",
+    path: "./res/ohhat.wav",
+}
 const snare = {
     name: "Snare",
-    path: "./res/snare.wav",
+    path: "./res/snare2.wav",
 }
 // export const drums = [ kick ]
-export const drums = [ kick, clap, hhat, snare ]
+export const drums = [ kick, clap, hhat, ohat, snare ]
 
 const drumPaths = drums.reduce((map, d) => {
     map[d.name] = d.path;
@@ -53,12 +57,16 @@ export default class StepSequencer extends Component {
     this.onHit = this.onHit.bind(this);
   }
   render() {
+    let playingClass = this.state.playing ? "viewing" : "";
     return (
       <div className="container-fluid">
         <div className="containerBox"> 
           <div className="row controls">
-              <i onClick={() => { this.startPlay()}} className="material-icons ">play_arrow</i>
-              <i onClick={() => { this.stopPlay()}} className="material-icons ">stop</i>
+              {/* <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i> */}
+              <div className={playingClass}>
+                <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
+                <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
+              </div>
           </div>
           <div className="row sequencer">
             <ul className="nav nav-pills container instruments" role="tablist">
@@ -112,11 +120,14 @@ export default class StepSequencer extends Component {
   startPlay() {
   Tone.Transport.start()
   this.loop.start()
+  this.setState({playing: true})
   }
 
   stopPlay() {
   // Tone.Transport.stop() 
   this.loop.stop()
+  this.setState({pbCol: -1})
+  this.setState({playing: false})
   }
 
 }
