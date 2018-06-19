@@ -28,6 +28,7 @@ const snare = {
     path: "./res/snare.wav",
     pattern: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 }
+// export const drums = [ kick ]
 export const drums = [ kick, clap, hhat, snare ]
 
 const drumPaths = drums.reduce((map, d) => {
@@ -40,77 +41,84 @@ const drumSampler = new Tone.Players(drumPaths, () => { log('loaded drums!') })
 drumSampler.connect(gain)
 gain.toMaster();
 
-
- export default class StepSequencer extends Component {
-    constructor(props) {
-        super(props);        
-        this.state = { drumsPatterns: Array(drums.length).fill().map(() => Array(sequence.length).fill(0))}
-        this.loop = new Tone.Sequence((time, col) => {
-          for (let i = 0 ; i < drums.length ; i ++) {
-             if (this.state.drumsPatterns[i][col]) {
-                drumSampler.get(drums[i].name).start(time, 0, "16n")
-             }
-            //  log('col: ', col)
-              // should call here
-          }
-      }, sequence, "16n");
-      this.onHit = this.onHit.bind(this);
-    }
-   render() {
-     return (
-       <div className="container-fluid">
-          <div className="containerBox"> 
-            <div className="row controls">
-                <i onClick={() => { this.startPlay()}} className="material-icons ">play_arrow</i>
-                <i onClick={() => { this.stopPlay()}} className="material-icons ">stop</i>
-            </div>
-            <div className="row sequencer">
-              <ul className="nav nav-pills container instruments" role="tablist">
-                <li className="nav-item"><a data-toggle="pill"
-                  href="#drums" className="nav-link active" aria-selected="true">DRUMS</a></li>
-                <li className="nav-item"><a data-toggle="pill"
-                  href="#bass" className="nav-link" aria-selected="false">BASS</a></li>
-                <li className="nav-item"><a data-toggle="pill" 
-                  href="#lead" className="nav-link" aria-selected="false">LEAD</a></li>
-              </ul>
-              <div className="tab-content">
-                <div className="tab pane fade show active" id="drums" role="tabpanel" aria-labelledby="drums">
-                  {drums.map((d,i) => {
-                  return <Drum i={i} key={d.name} name={d.name} onHit={this.onHit}/>
-                })}
-                </div>
-                <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
-                  bass
-                </div>
-                <div className="tab pane fade" id="lead" role="tabpanel" aria-labelledby="lead">
-                  lead
-                </div>
-
-              </div>
-              
-            </div> 
+export default class StepSequencer extends Component {
+  constructor(props) {
+      super(props);        
+      this.state = { drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0))}
+      this.loop = new Tone.Sequence((time, col) => {
+        for (let i = 0 ; i < drums.length ; i ++) {
+            if (this.state.drumsPatterns[i][col]) {
+              drumSampler.get(drums[i].name).start(time, 0, "16n")
+            }
+        }
+    }, sequence, "16n");
+    this.onHit = this.onHit.bind(this);
+  }
+  render() {
+    return (
+      <div className="container-fluid">
+        <div className="containerBox"> 
+          <div className="row controls">
+              <i onClick={() => { this.startPlay()}} className="material-icons ">play_arrow</i>
+              <i onClick={() => { this.stopPlay()}} className="material-icons ">stop</i>
           </div>
-        <div/>
-       </div>
-     )
-   }
+          <div className="row sequencer">
+            <ul className="nav nav-pills container instruments" role="tablist">
+              <li className="nav-item"><a data-toggle="pill"
+                href="#drums" className="nav-link active" aria-selected="true">DRUMS</a></li>
+              <li className="nav-item"><a data-toggle="pill"
+                href="#bass" className="nav-link" aria-selected="false">BASS</a></li>
+              <li className="nav-item"><a data-toggle="pill" 
+                href="#lead" className="nav-link" aria-selected="false">LEAD</a></li>
+            </ul>
+            <div className="tab-content">
+              <div className="tab pane fade show active" id="drums" role="tabpanel" aria-labelledby="drums">
+                {drums.map((d,i) => {
+                return <Drum i={i} key={d.name} name={d.name} onHit={this.onHit} pattern={this.state.drumsPatterns[i]}/>
+              })}
+              </div>
+              <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
+                bass
+              </div>
+              <div className="tab pane fade" id="lead" role="tabpanel" aria-labelledby="lead">
+                lead
+              </div>
 
-   onHit(l, c) {
-     log('onHit: ', l, ' ', c)
-     let dp = this.state.drumsPatterns;
-     dp[l][c] = !dp[l][c]
-     this.setState(dp)
-   }
+            </div>
+            
+          </div> 
+        </div>
+      <div/>
+      </div>
+    )
+  }
 
-   startPlay() {
-    Tone.Transport.start()
-    this.loop.start()
+  onHit(l, c) {
+    log('onHit: ', l, ' ', c)
+    let dp = this.state.drumsPatterns;
+    dp[l][c] = !dp[l][c]
+    this.logDrumPatterns();
+    this.setState(dp)
+  }
+
+  logDrumPatterns() {
+    let a = this.state.drumsPatterns;
+    // debugger;
+    for (let i = 0 ; i < a.length ; i ++) {
+        for (let j = 0 ; j < a[0].length ; j ++) {
+            if (a[i][j]) log("hit at ", i, " ", j)
+        }
     }
+  }
 
-  stopPlay() {
-    // Tone.Transport.stop() 
-    this.loop.stop()
-    }
+  startPlay() {
+  Tone.Transport.start()
+  this.loop.start()
+  }
 
- }
- 
+stopPlay() {
+  // Tone.Transport.stop() 
+  this.loop.stop()
+  }
+
+}
