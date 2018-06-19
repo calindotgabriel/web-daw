@@ -109,3 +109,17 @@ body {
 .viewing {
   background-color: #F1DE98;
 }
+
+.form-control {
+  background: rgb(250, 252, 240);
+}
+
+.form-control:focus {
+	/* color: #417378; */
+	/* border-color: #417378; */
+	box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}
+
+.bpm-err:focus {
+  border-color:red;
+}

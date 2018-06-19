@@ -7,7 +7,7 @@ import Tone from 'tone';
 
 let log = console.log;
 
-Tone.Transport.bpm.value = 122;
+
 // 16 * 16 sixteen notes = 1 measure
 // 2 * 8 eighteen notes = 2 measures ( pace slowed ) 
 
