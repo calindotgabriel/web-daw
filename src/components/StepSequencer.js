@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
  
-import { sequence } from './../constants'
+import Note from './Note'
 
-import Drum from './Drum'
+import DrumBox from './DrumBox'
 
 import Tone from 'tone';
 
@@ -13,64 +13,73 @@ let log = console.log;
 const BPM = 120;
 Tone.Transport.bpm.value = BPM;
 
+const majorScale = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+
 const kick = {
-    name: "Kick",
-    path: "./res/kick.wav",
-    color: 'red'
+  name: "Kick",
+  path: "./res/kick.wav",
+  color: 'red'
 }
 const clap = {
-    name: "Clap",
-    path: "./res/clap2.wav",
-    color: 'orange'
+  name: "Clap",
+  path: "./res/clap2.wav",
+  color: 'orange'
 }
 const hhat = {
-    name: "CHat",
-    path: "./res/chhat.wav",
-    color: 'green'
+  name: "CHat",
+  path: "./res/chhat.wav",
+  color: 'green'
 }
 const ohat = {
-    name: "OHat",
-    path: "./res/ohhat.wav",
-    color: 'blueviolet'
+  name: "OHat",
+  path: "./res/ohhat.wav",
+  color: 'blueviolet'
 }
 const snare = {
-    name: "Snare",
-    path: "./res/snare2.wav",
+  name: "Snare",
+  path: "./res/snare2.wav",
 }
 // export const drums = [ kick ]
 export const drums = [ kick, clap, hhat, ohat, snare ]
 
+
 const drumPaths = drums.reduce((map, d) => {
-    map[d.name] = d.path;
-    return map;
-  }, {});
+  map[d.name] = d.path;
+  return map;
+}, {});
 
 const gain = new Tone.Gain(0.35)  
 const drumKeys = new Tone.Players(drumPaths, () => { log('loaded drums') })
 drumKeys.connect(gain)
 gain.toMaster();
 
+const sequence = [0, 1, 2, 3, 4, 5, 6, 7, 8,9 , 10 , 11, 12 , 13 , 14, 15]
+
 export default class StepSequencer extends Component {
   constructor(props) {
       super(props);        
-      this.state = { bpm: BPM, drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0))}
+      this.state = { bpm: BPM, playing: false, 
+        drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0))}
+
       this.loop = new Tone.Sequence((time, col) => {
         for (let i = 0 ; i < drums.length ; i ++) {
             if (this.state.drumsPatterns[i][col]) {
               drumKeys.get(drums[i].name).start(time, 0, "16n")
             }
         }
-        log('col: ', col)
         this.setState({pbCol: col})
-    }, sequence, "16n");
-    this.onHit = this.onHit.bind(this);
+        log('pbcol: ', col)
+        }, sequence, "16n");
+      
     this.onChangeBpm = this.onChangeBpm.bind(this);
+    this.onHit = this.onHit.bind(this);
+
   }
 
   render() {
     let playingClass = this.state.playing ? "viewing" : "";
     return (
-      <div className="container-fluid">
+      <div id="sequencer" className="container-fluid">
         <div className="containerBox"> 
           <div className="row controls">
               <div className="col-10">
@@ -98,35 +107,42 @@ export default class StepSequencer extends Component {
             </ul>
             <div className="tab-content">
               <div className="tab pane fade show active" id="drums" role="tabpanel" aria-labelledby="drums">
-                {drums.map((d,i) => {
-                return <Drum key={d.name} i={i} name={d.name} 
-                  onHit={this.onHit} color={d.color} pattern={this.state.drumsPatterns[i]} pbCol={this.state.pbCol}/>
-              })}
+                
+              <DrumBox drums={drums} pbCol={this.state.pbCol} onHit={this.onHit}
+                drumsPatterns={this.state.drumsPatterns}/>
+              {/* {this.state.playing ? "playing" : "not playing"} */}
+
               </div>
               <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
-                bass
+                
+                {majorScale.map((n, i) => {
+                  return <Note note={n} key={i}/>
+                })}
+
               </div>
               <div className="tab pane fade" id="lead" role="tabpanel" aria-labelledby="lead">
                 lead
               </div>
 
             </div>
-          </div> 
-                
+           </div> 
+
+
 
         </div>
       <div/>
       </div>
     )
   }
-  
+
   onHit(l, c) {
-    log('onHit: ', l, ' ', c)
+    // log('onHit: ', l, ' ', c)
     let dp = this.state.drumsPatterns;
     dp[l][c] = !dp[l][c]
-    this.logDrumPatterns();
-    this.setState(dp)
+    // this.logDrumPatterns(dp);
+    this.setState({drumsPatterns: dp})
   }
+
 
   onChangeBpm(e) {
     log('bpm: ', e.target.value)
@@ -143,8 +159,8 @@ export default class StepSequencer extends Component {
     Tone.Transport.bpm.value = bpm;
   }
 
-  logDrumPatterns() {
-    let a = this.state.drumsPatterns;
+  logDrumPatterns(a) {
+    // let a = this.state.drumsPatterns;
     for (let i = 0 ; i < a.length ; i ++) {
         for (let j = 0 ; j < a[0].length ; j ++) {
             if (a[i][j]) log("hit at ", i, " ", j)
@@ -153,13 +169,12 @@ export default class StepSequencer extends Component {
   }
 
   startPlay() {
-  Tone.Transport.start()
   this.loop.start()
+  Tone.Transport.start()
   this.setState({playing: true})
   }
 
   stopPlay() {
-  // Tone.Transport.stop() 
   this.loop.stop()
   this.setState({pbCol: -1})
   this.setState({playing: false})

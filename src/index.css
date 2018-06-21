@@ -66,10 +66,10 @@ body {
 .cell-no {
   position: relative;
 }
-
+/* 
 .boxes div:nth-child(4n+1) {
   margin-left: .4em;
-}
+} */
 
 .title {
   text-align: left;
@@ -102,9 +102,6 @@ body {
   display: none;
 }
 
-.badge {
-  /* border: 1px solid #417378; */
-}
 
 .viewing {
   background-color: #F1DE98;
@@ -122,4 +119,13 @@ body {
 
 .bpm-err:focus {
   border-color:red;
+}
+
+#bass {
+  min-width: 700px;
+  padding-left: 1em;
+}
+
+#sequencer {
+  /* min-height: 1400px;  */
 }

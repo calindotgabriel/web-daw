@@ -4,7 +4,7 @@ let log = console.log;
 
 let colorStyle = (color) => {
     if (!color) return {}
-    return { 'background-color': color };
+    return { 'backgroundColor': color };
 }
 
 class Box extends Component {
