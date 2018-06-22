@@ -151,7 +151,7 @@ export default class StepSequencer extends Component {
 
   setBpm(bpm) {
     this.setState({bpm: bpm})
-    if (bpm < 40 || bpm > 200) {
+    if (bpm < 5 || bpm > 200) {
       this.setState({bpmError: true})
       return;
     }

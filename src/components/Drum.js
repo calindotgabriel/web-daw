@@ -31,6 +31,13 @@ export class Drum extends Component {
   onToggleBox(rowIndex) {
       this.props.onHit(this.props.i, rowIndex)
     }
+
+    shouldComponentUpdate() {
+      // if (this.props.pbCol == this.props.i) return true;
+      // if (this.props.hit) return true;
+      // return false;
+      return true;
+  }
 }
 
 export default Drum

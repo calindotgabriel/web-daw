@@ -27,7 +27,10 @@ class Box extends Component  {
 
         // let cell = <div className="cell"></div>;
         let cell = <div onClick={this.onToggle}
-            className={classNames('cell', {'hit' : this.props.hit})}
+            className={classNames('cell', 
+            {'hit' : this.props.hit},
+            {'viewing' : this.props.pbCol == this.props.i}
+            )}
             style={colorStyle(this.props.color, this.props.hit)}>
             {this.props.hit ? this.props.i + 1 : ''}
             </div>;
@@ -36,6 +39,11 @@ class Box extends Component  {
     }
     onToggle(e) {
         this.props.onToggle(this.props.i);
+    }
+    shouldComponentUpdate() {
+        // if (this.props.hit) return true;
+        // return false;
+        return true;
     }
 }
  

@@ -22,15 +22,13 @@ export default class DrumBox extends Component {
       <div>
            {this.props.drums.map((d,i) => {
                 return <Drum key={d.name} i={i} name={d.name} 
-                  onHit={this.props.onHit} color={d.color} pattern={this.props.drumsPatterns[i]} pbCol={this.props.pbCol}/>
+                  onHit={this.props.onHit} color={d.color} pattern={this.props.drumsPatterns[i]} 
+                  pbCol={this.props.pbCol}/>
               })}
       </div>
     )
   }
 
-  // shouldComponentUpdate() {
-
-  // }
 
 
 
