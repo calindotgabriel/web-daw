@@ -136,7 +136,7 @@ export default class StepSequencer extends Component {
   }
 
   onHit(l, c) {
-    // log('onHit: ', l, ' ', c)
+    log('onHit: ', l, ' ', c)
     let dp = this.state.drumsPatterns;
     dp[l][c] = !dp[l][c]
     // this.logDrumPatterns(dp);

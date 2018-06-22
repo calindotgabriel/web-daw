@@ -18,7 +18,8 @@ export class Drum extends Component {
         </div>
         <div className="col-lg-11 boxes">
         {Array(16).fill(0).map((j, i) => { 
-            return <Box i={i} key={i} onToggle={this.onToggleBox} active={this.props.pattern[i]} 
+            return <Box i={i} key={i} onToggle={this.onToggleBox} 
+                        hit={this.props.pattern[i]} 
                         color={this.props.color}
                         pbCol={this.props.pbCol}></Box>
             })}

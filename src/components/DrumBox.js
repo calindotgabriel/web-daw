@@ -28,6 +28,10 @@ export default class DrumBox extends Component {
     )
   }
 
+  // shouldComponentUpdate() {
+
+  // }
+
 
 
 }
