@@ -59,7 +59,9 @@ export default class StepSequencer extends Component {
   constructor(props) {
       super(props);        
       this.state = { bpm: BPM, playing: false, 
-        drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0))}
+        drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0)),
+        notesPatterns: Array(majorScale.length).fill(0).map(() => Array(sequence.length).fill(0))
+      }
 
       this.loop = new Tone.Sequence((time, col) => {
         for (let i = 0 ; i < drums.length ; i ++) {
@@ -73,6 +75,7 @@ export default class StepSequencer extends Component {
       
     this.onChangeBpm = this.onChangeBpm.bind(this);
     this.onHit = this.onHit.bind(this);
+    this.onNote = this.onNote.bind(this);
 
   }
 
@@ -116,7 +119,11 @@ export default class StepSequencer extends Component {
               <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
                 
                 {majorScale.map((n, i) => {
-                  return <Note note={n} key={i}/>
+                  return <Note note={n} key={i} i={i}
+                               pbCol={this.state.pbCol}
+                               onNote={this.onNote}
+                               pattern={this.state.notesPatterns[i]}
+                  />
                 })}
 
               </div>
@@ -126,9 +133,6 @@ export default class StepSequencer extends Component {
 
             </div>
            </div> 
-
-
-
         </div>
       <div/>
       </div>
@@ -141,6 +145,12 @@ export default class StepSequencer extends Component {
     dp[l][c] = !dp[l][c]
     // this.logDrumPatterns(dp);
     this.setState({drumsPatterns: dp})
+  }
+
+  onNote(l, c) {
+     let np = this.state.notesPatterns
+     np[l][c] = !np[l][c]
+     this.setState({notesPatterns: np})
   }
 
 
