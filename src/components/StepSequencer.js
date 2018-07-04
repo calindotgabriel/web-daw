@@ -1,19 +1,25 @@
 import React, { Component } from 'react'
  
-import Note from './Note'
-
 import DrumBox from './DrumBox'
+import BassBox from './BassBox'
 
 import Tone from 'tone';
 
 import classNames from 'classnames';
+
+var fileDownload = require('js-file-download');
+
+var MidiWriter = require('midi-writer-js');
+// var fs = require('browserify-fs');
+
+
+const majorScale = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 
 let log = console.log;
 
 const BPM = 120;
 Tone.Transport.bpm.value = BPM;
 
-const majorScale = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 
 const kick = {
   name: "Kick",
@@ -55,6 +61,8 @@ gain.toMaster();
 
 const sequence = [0, 1, 2, 3, 4, 5, 6, 7, 8,9 , 10 , 11, 12 , 13 , 14, 15]
 
+const synth = new Tone.Synth().toMaster();
+
 export default class StepSequencer extends Component {
   constructor(props) {
       super(props);        
@@ -62,22 +70,56 @@ export default class StepSequencer extends Component {
         drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0)),
         notesPatterns: Array(majorScale.length).fill(0).map(() => Array(sequence.length).fill(0))
       }
+      const track = new MidiWriter.Track();
+
+      track.addEvent([
+        new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
+        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'}),
+        new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
+        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'}),
+        new MidiWriter.NoteEvent({pitch: ['C4', 'C4', 'C4', 'C4', 'D4', 'D4', 'D4', 'D4'], duration: '8'}),
+        new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
+        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'})
+        ], 
+        function(event, index) {
+        // Sets the sequential property to true for all events
+        return {sequential:true};
+        } 
+      );
+
+      // const write = new MidiWriter.Writer([track]);
+      // // write.saveMIDI('file')
+      // // log(write.dataUri())
+      // fs.writeFile('./file.mid', write.dataUri(), (err) => {
+      //   if (err) throw err;
+      //   log('file midi saved!!')
+      // })
+      let data = 'abcd'
+      fileDownload(data, 'file.txt');
 
       this.loop = new Tone.Sequence((time, col) => {
         for (let i = 0 ; i < drums.length ; i ++) {
             if (this.state.drumsPatterns[i][col]) {
               drumKeys.get(drums[i].name).start(time, 0, "16n")
             }
+            if (this.state.notesPatterns[i][col]) {
+              // log('X: ', i, ' ', col)
+              const note = majorScale[i]
+              const octave = '2';
+              // log(note)
+              const noteAndOctave = note + octave;
+              synth.triggerAttackRelease(noteAndOctave, "16n")
+            }
         }
         this.setState({pbCol: col})
-        log('pbcol: ', col)
+        // log('pbcol: ', col)
         }, sequence, "16n");
       
     this.onChangeBpm = this.onChangeBpm.bind(this);
     this.onHit = this.onHit.bind(this);
     this.onNote = this.onNote.bind(this);
-
   }
+  
 
   render() {
     let playingClass = this.state.playing ? "viewing" : "";
@@ -118,13 +160,8 @@ export default class StepSequencer extends Component {
               </div>
               <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
                 
-                {majorScale.map((n, i) => {
-                  return <Note note={n} key={i} i={i}
-                               pbCol={this.state.pbCol}
-                               onNote={this.onNote}
-                               pattern={this.state.notesPatterns[i]}
-                  />
-                })}
+                <BassBox notesPatterns={this.state.notesPatterns} pbCol={this.state.pbCol}
+                  onNote={this.onNote} />
 
               </div>
               <div className="tab pane fade" id="lead" role="tabpanel" aria-labelledby="lead">

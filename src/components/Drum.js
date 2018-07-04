@@ -12,7 +12,7 @@ export class Drum extends Component {
 
   render() {
     return (
-      <div className="row">
+      <div className="row drum">
           <div className="col-lg-1 drum-label">
               {this.props.name}
         </div>

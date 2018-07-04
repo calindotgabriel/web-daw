@@ -7,15 +7,17 @@ body {
 
 .cell {
   float: left;
-  padding: 4px;
+  padding: 3px;
   /* background-color: '#D7DCF2'; */
   background-color: grey;
-  margin: 2px;
+  /* margin: 2px; */
   color: white;
   border: 1px solid black;
-  width: 27px;
-  height: 27px;
-  font-size: 12px;
+  /* width: 27px;
+  height: 27px; */
+  width: 35px;
+  height: 35px;
+  font-size: 15px;
   text-align: center;
 }
 
@@ -66,10 +68,10 @@ body {
 .cell-no {
   position: relative;
 }
-/* 
+
 .boxes div:nth-child(4n+1) {
-  margin-left: .4em;
-} */
+  margin-left: .2em;
+}
 
 .title {
   text-align: left;
@@ -128,4 +130,13 @@ body {
 
 #sequencer {
   /* min-height: 1400px;  */
+  width: 1500px;
+}
+
+.underlined {
+  text-decoration: underline;
+}
+
+.drum {
+  margin-bottom: .3em;
 }

@@ -29,7 +29,8 @@ class Box extends Component  {
         let cell = <div onClick={this.onToggle}
             className={classNames('cell', 
             {'hit' : this.props.hit},
-            {'viewing' : this.props.pbCol == this.props.i}
+            {'viewing' : this.props.pbCol == this.props.i,
+             'underlined': this.props.i % 4 == 0  }
             )}
             style={colorStyle(this.props.color, this.props.hit)}>
             {this.props.hit ? this.props.i + 1 : ''}

@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "browserify-fs": "^1.0.0",
     "classnames": "^2.2.6",
+    "fs": "^0.0.1-security",
+    "js-file-download": "^0.4.1",
+    "midi-writer-js": "^1.5.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-tabs": "^2.2.2",

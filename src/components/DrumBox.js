@@ -16,8 +16,6 @@ export default class DrumBox extends Component {
   }
 
   render() {
-    log('drumbox render!!')
-    
     return (
       <div>
            {this.props.drums.map((d,i) => {
