@@ -2,6 +2,7 @@ import React, { Component } from 'react'
  
 import DrumBox from './DrumBox'
 import BassBox from './BassBox'
+import LeadBox from './LeadBox'
 
 import Tone from 'tone';
 
@@ -62,16 +63,28 @@ gain.toMaster();
 const sequence = [0, 1, 2, 3, 4, 5, 6, 7, 8,9 , 10 , 11, 12 , 13 , 14, 15]
 
 const synth = new Tone.Synth().toMaster();
+const leadSynth = new Tone.FMSynth({
+  "envelope" : {
+    "attack" : 0.8,
+    "decay" : 0.7
+  },
+  "modulation" : {
+    "type" : "square"
+  },
+  "modulationEnvelope" : {
+    "attack" : 0.2,
+    "decay" : 0.01
+  }
+}).toMaster();
 
 export default class StepSequencer extends Component {
   constructor(props) {
       super(props);        
       this.state = { bpm: BPM, playing: false, 
         drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0)),
-        notesPatterns: majorScale.map(() => Array(sequence.length).fill(0))
+        bassNPatterns: majorScale.map(() => Array(sequence.length).fill(0)),
+        leadNPatterns: majorScale.map(() => Array(sequence.length).fill(0)),
       }
-      
-
       this.loop = new Tone.Sequence((time, col) => {
         for (let i = 0 ; i < drums.length ; i ++) {
             if (this.state.drumsPatterns[i][col]) {
@@ -79,12 +92,18 @@ export default class StepSequencer extends Component {
             }
         }
         for (let i = 0 ; i < majorScale.length; i ++) {
-          if (this.state.notesPatterns[i][col]) {
+          if (this.state.bassNPatterns[i][col]) {
             // log('i,col: ', i, ' ', col)
             const note = majorScale[i];
             const noteAndOctave = note + '2';
             // log('nAOc: ', noteAndOctave)
             synth.triggerAttackRelease(noteAndOctave, "16n")
+          }
+          if (this.state.leadNPatterns[i][col]) {
+            const note = majorScale[i];
+            const noteAndOctave = note + '4';
+            // leadSynth.triggerAttackRelease(noteAndOctave, "8n")
+            leadSynth.triggerAttackRelease(noteAndOctave, "16n")
           }
         }
         this.setState({pbCol: col})
@@ -93,7 +112,8 @@ export default class StepSequencer extends Component {
       
     this.onChangeBpm = this.onChangeBpm.bind(this);
     this.onHit = this.onHit.bind(this);
-    this.onNote = this.onNote.bind(this);
+    this.onBassNote = this.onBassNote.bind(this);
+    this.onLeadNote = this.onLeadNote.bind(this);
     this.onExport = this.onExport.bind(this);
   }
   
@@ -137,12 +157,15 @@ export default class StepSequencer extends Component {
               </div>
               <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
                 
-                <BassBox notesPatterns={this.state.notesPatterns} pbCol={this.state.pbCol}
-                  onNote={this.onNote} />
+                <BassBox notesPatterns={this.state.bassNPatterns} pbCol={this.state.pbCol}
+                  onNote={this.onBassNote} />
 
               </div>
               <div className="tab pane fade" id="lead" role="tabpanel" aria-labelledby="lead">
-                lead
+                <LeadBox 
+                  notesPatterns = {this.state.leadNPatterns}
+                  pbCol={this.state.pbCol}
+                  onNote={this.onLeadNote} />
               </div>
 
             </div>
@@ -173,7 +196,7 @@ export default class StepSequencer extends Component {
     for (let col = 0 ; col <= 8 ; col ++) {
       let pitches = []
       for (let i = 0 ; i < majorScale.length; i ++) {
-        if (this.state.notesPatterns[i][col]) {
+        if (this.state.bassNPatterns[i][col]) {
           // log('i,col: ', i, ' ', col)
           const note = majorScale[i];
           const noteAndOctave = note + '2';
@@ -198,10 +221,17 @@ export default class StepSequencer extends Component {
       fileDownload(data, 'file.mid');
   }
 
-  onNote(l, c) {
-     let np = this.state.notesPatterns
-     np[l][c] = !np[l][c]
-     this.setState({notesPatterns: np})
+  onBassNote(l, c) {
+     let bp = this.state.bassNPatterns
+     bp[l][c] = !bp[l][c]
+     this.setState({notesPatterns: bp})
+  }
+
+  onLeadNote(l, c) {
+    log('leadnote: ', l , ' ', c);
+    let lp = this.state.leadNPatterns;
+    lp[l][c] = !lp[l][c];
+    this.setState({leadNPatterns: lp})
   }
 
 
