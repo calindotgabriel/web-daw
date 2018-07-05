@@ -68,48 +68,24 @@ export default class StepSequencer extends Component {
       super(props);        
       this.state = { bpm: BPM, playing: false, 
         drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0)),
-        notesPatterns: Array(majorScale.length).fill(0).map(() => Array(sequence.length).fill(0))
+        notesPatterns: majorScale.map(() => Array(sequence.length).fill(0))
       }
-      const track = new MidiWriter.Track();
-
-      track.addEvent([
-        new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
-        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'}),
-        new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
-        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'}),
-        new MidiWriter.NoteEvent({pitch: ['C4', 'C4', 'C4', 'C4', 'D4', 'D4', 'D4', 'D4'], duration: '8'}),
-        new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
-        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'})
-        ], 
-        function(event, index) {
-        // Sets the sequential property to true for all events
-        return {sequential:true};
-        } 
-      );
-
-      // const write = new MidiWriter.Writer([track]);
-      // // write.saveMIDI('file')
-      // // log(write.dataUri())
-      // fs.writeFile('./file.mid', write.dataUri(), (err) => {
-      //   if (err) throw err;
-      //   log('file midi saved!!')
-      // })
-      let data = 'abcd'
-      fileDownload(data, 'file.txt');
+      
 
       this.loop = new Tone.Sequence((time, col) => {
         for (let i = 0 ; i < drums.length ; i ++) {
             if (this.state.drumsPatterns[i][col]) {
               drumKeys.get(drums[i].name).start(time, 0, "16n")
             }
-            if (this.state.notesPatterns[i][col]) {
-              // log('X: ', i, ' ', col)
-              const note = majorScale[i]
-              const octave = '2';
-              // log(note)
-              const noteAndOctave = note + octave;
-              synth.triggerAttackRelease(noteAndOctave, "16n")
-            }
+        }
+        for (let i = 0 ; i < majorScale.length; i ++) {
+          if (this.state.notesPatterns[i][col]) {
+            // log('i,col: ', i, ' ', col)
+            const note = majorScale[i];
+            const noteAndOctave = note + '2';
+            // log('nAOc: ', noteAndOctave)
+            synth.triggerAttackRelease(noteAndOctave, "16n")
+          }
         }
         this.setState({pbCol: col})
         // log('pbcol: ', col)
@@ -118,6 +94,7 @@ export default class StepSequencer extends Component {
     this.onChangeBpm = this.onChangeBpm.bind(this);
     this.onHit = this.onHit.bind(this);
     this.onNote = this.onNote.bind(this);
+    this.onExport = this.onExport.bind(this);
   }
   
 
@@ -170,6 +147,10 @@ export default class StepSequencer extends Component {
 
             </div>
            </div> 
+
+           <div className="row midi">
+            <div className="float-right"> <span onClick={this.onExport}>Export to MIDI</span> </div>
+           </div>
         </div>
       <div/>
       </div>
@@ -182,6 +163,39 @@ export default class StepSequencer extends Component {
     dp[l][c] = !dp[l][c]
     // this.logDrumPatterns(dp);
     this.setState({drumsPatterns: dp})
+  }
+
+  onExport() {
+    // log('Should export to midi!')
+    
+    const track = new MidiWriter.Track();
+    let events = [];
+    for (let col = 0 ; col <= 8 ; col ++) {
+      let pitches = []
+      for (let i = 0 ; i < majorScale.length; i ++) {
+        if (this.state.notesPatterns[i][col]) {
+          // log('i,col: ', i, ' ', col)
+          const note = majorScale[i];
+          const noteAndOctave = note + '2';
+          pitches.push(noteAndOctave)
+        }
+      }
+      events.push(new MidiWriter.NoteEvent({pitch: pitches, duration: '8'}) )
+    }
+
+      track.addEvent(events, 
+        function(event, index) {
+        // Sets the sequential property to true for all events
+        return {sequential:true};
+        } 
+      );
+      track.setTempo(this.state.bpm)
+
+      const write = new MidiWriter.Writer([track]);
+      // write.saveMIDI('file')
+      // log(write.dataUri())
+      let data = write.buildFile();
+      fileDownload(data, 'file.mid');
   }
 
   onNote(l, c) {

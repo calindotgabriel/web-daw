@@ -140,3 +140,17 @@ body {
 .drum {
   margin-bottom: .3em;
 }
+
+.midi {
+  display: block;
+  /* padding: .5em; */
+  margin-top: 10px;
+}
+.midi span {
+  margin-right: 1em;
+  font-size: 12pt;
+}
+.midi span:hover {
+  color: #417378;
+  cursor: pointer;
+}
