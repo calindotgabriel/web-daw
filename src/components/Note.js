@@ -17,7 +17,7 @@ export class Note extends Component {
               {this.props.note}
         </div>
         <div className="col-lg-11 boxes">
-        {Array(8).fill(0).map((j, i) => { 
+        {Array(16).fill(0).map((j, i) => { 
             // return <
             return <Box i={i} onToggle={this.onToggleBox} 
               pbCol={this.props.pbCol}
