@@ -15,36 +15,20 @@ class Box extends Component  {
         super(props);
         this.onToggle = this.onToggle.bind(this);
     } 
-    render() {  // onToggle
-        // log('box ', this.props.i, 'active: ', this.props.active)
-        // let pbClass = this.props.pbCol == this.props.i ? 'viewing' : '';
-        // let hitClass = `cell hit ${pbClass}`
-        // let unhitClass = `cell ${pbClass}`
-        // const hitBox = <div onClick={this.onToggle} style={colorStyle(this.props.color)} className={hitClass}>
-        //     {this.props.i + 1}</div>;
-        // const unhitBox = <div onClick={this.onToggle} className={unhitClass}></div>;
-        // return this.props.active ? hitBox : unhitBox
-
-        // let cell = <div className="cell"></div>;
-        let cell = <div onClick={this.onToggle}
-            className={classNames('cell', 
-            {'hit' : this.props.hit},
-            {'viewing' : this.props.pbCol == this.props.i,
-             'underlined': this.props.i % 4 == 0  }
-            )}
+    render() {
+        return (
+        <div onClick={this.onToggle} className={classNames('cell', 
+        { 'hit' : this.props.hit },
+        { 'viewing' : this.props.pbCol == this.props.i, 
+        'underlined': this.props.i % 4 == 0  })}
             style={colorStyle(this.props.color, this.props.hit)}>
             {this.props.hit ? this.props.i + 1 : ''}
-            </div>;
-        return cell;
+        </div>)
+        ;
                
     }
-    onToggle(e) {
+    onToggle() {
         this.props.onToggle(this.props.i);
-    }
-    shouldComponentUpdate() {
-        // if (this.props.hit) return true;
-        // return false;
-        return true;
     }
 }
  

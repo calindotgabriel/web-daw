@@ -14,8 +14,9 @@
   color: white;
 }
 
-.App-title {
+.title {
   font-size: 1.5em;
+  margin-left: 5vw;
 }
 
 .App-intro {

@@ -8,19 +8,13 @@ import Tone from 'tone';
 
 import classNames from 'classnames';
 
-var fileDownload = require('js-file-download');
-
-var MidiWriter = require('midi-writer-js');
-// var fs = require('browserify-fs');
-
-
-const majorScale = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+import fileDownload from 'js-file-download';
+import MidiWriter from 'midi-writer-js';
 
 let log = console.log;
 
 const BPM = 120;
 Tone.Transport.bpm.value = BPM;
-
 
 const kick = {
   name: "Kick",
@@ -46,21 +40,20 @@ const snare = {
   name: "Snare",
   path: "./res/snare2.wav",
 }
-// export const drums = [ kick ]
-export const drums = [ kick, clap, hhat, ohat, snare ]
+export const DRUMS = [ kick, clap, hhat, ohat, snare ]
 
 
-const drumPaths = drums.reduce((map, d) => {
+const drumPaths = DRUMS.reduce((map, d) => {
   map[d.name] = d.path;
   return map;
 }, {});
 
 const gain = new Tone.Gain(0.35)  
-const drumKeys = new Tone.Players(drumPaths, () => { log('loaded drums') })
+const drumKeys = new Tone.Players(drumPaths, () => { log('loaded DRUMS') })
 drumKeys.connect(gain)
 gain.toMaster();
 
-const sequence = [0, 1, 2, 3, 4, 5, 6, 7, 8,9 , 10 , 11, 12 , 13 , 14, 15]
+const PULSES = [0, 1, 2, 3, 4, 5, 6, 7, 8,9 , 10 , 11, 12 , 13 , 14, 15]
 
 const synth = new Tone.Synth().toMaster();
 const leadSynth = new Tone.FMSynth({
@@ -77,30 +70,35 @@ const leadSynth = new Tone.FMSynth({
   }
 }).toMaster();
 
+
+const MAJOR_SCALE = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+const EMPTY_DRUM_PATTERN = () => Array(DRUMS.length).fill(0).map(() => Array(PULSES.length).fill(0))
+const EMPTY_SYNTH_PATTERN = () => MAJOR_SCALE.map(() => Array(PULSES.length).fill(0));
+
 export default class StepSequencer extends Component {
   constructor(props) {
       super(props);        
       this.state = { bpm: BPM, playing: false, 
-        drumsPatterns: Array(drums.length).fill(0).map(() => Array(sequence.length).fill(0)),
-        bassNPatterns: majorScale.map(() => Array(sequence.length).fill(0)),
-        leadNPatterns: majorScale.map(() => Array(sequence.length).fill(0)),
+        drumsPatterns: EMPTY_DRUM_PATTERN(),
+        bassNPatterns: EMPTY_SYNTH_PATTERN(),
+        leadNPatterns: EMPTY_SYNTH_PATTERN(),
       }
       this.loop = new Tone.Sequence((time, col) => {
-        for (let i = 0 ; i < drums.length ; i ++) {
+        for (let i = 0 ; i < DRUMS.length ; i ++) {
             if (this.state.drumsPatterns[i][col]) {
-              drumKeys.get(drums[i].name).start(time, 0, "16n")
+              drumKeys.get(DRUMS[i].name).start(time, 0, "16n")
             }
         }
-        for (let i = 0 ; i < majorScale.length; i ++) {
+        for (let i = 0 ; i < MAJOR_SCALE.length; i ++) {
           if (this.state.bassNPatterns[i][col]) {
             // log('i,col: ', i, ' ', col)
-            const note = majorScale[i];
+            const note = MAJOR_SCALE[i];
             const noteAndOctave = note + '2';
             // log('nAOc: ', noteAndOctave)
             synth.triggerAttackRelease(noteAndOctave, "16n")
           }
           if (this.state.leadNPatterns[i][col]) {
-            const note = majorScale[i];
+            const note = MAJOR_SCALE[i];
             const noteAndOctave = note + '4';
             // leadSynth.triggerAttackRelease(noteAndOctave, "8n")
             leadSynth.triggerAttackRelease(noteAndOctave, "16n")
@@ -108,13 +106,14 @@ export default class StepSequencer extends Component {
         }
         this.setState({pbCol: col})
         // log('pbcol: ', col)
-        }, sequence, "16n");
+        }, PULSES, "16n");
       
     this.onChangeBpm = this.onChangeBpm.bind(this);
     this.onHit = this.onHit.bind(this);
     this.onBassNote = this.onBassNote.bind(this);
     this.onLeadNote = this.onLeadNote.bind(this);
     this.onExport = this.onExport.bind(this);
+    this.onClear = this.onClear.bind(this);
   }
   
 
@@ -141,16 +140,16 @@ export default class StepSequencer extends Component {
           <div className="row sequencer">
             <ul className="nav nav-pills container instruments" role="tablist">
               <li className="nav-item"><a data-toggle="pill"
-                href="#drums" className="nav-link active" aria-selected="true">DRUMS</a></li>
+                href="#DRUMS" className="nav-link active" aria-selected="true">DRUMS</a></li>
               <li className="nav-item"><a data-toggle="pill"
                 href="#bass" className="nav-link" aria-selected="false">BASS</a></li>
               <li className="nav-item"><a data-toggle="pill" 
                 href="#lead" className="nav-link" aria-selected="false">LEAD</a></li>
             </ul>
             <div className="tab-content">
-              <div className="tab pane fade show active" id="drums" role="tabpanel" aria-labelledby="drums">
+              <div className="tab pane fade show active" id="DRUMS" role="tabpanel" aria-labelledby="DRUMS">
                 
-              <DrumBox drums={drums} pbCol={this.state.pbCol} onHit={this.onHit}
+              <DrumBox drums={DRUMS} pbCol={this.state.pbCol} onHit={this.onHit}
                 drumsPatterns={this.state.drumsPatterns}/>
               {/* {this.state.playing ? "playing" : "not playing"} */}
 
@@ -172,7 +171,10 @@ export default class StepSequencer extends Component {
            </div> 
 
            <div className="row midi">
-            <div className="float-right"> <span onClick={this.onExport}>Export to MIDI</span> </div>
+            <div className="float-right"> 
+              <span onClick={this.onExport}>Export to MIDI</span> 
+              <button id="btn-clear" className="btn btn-info" onClick={this.onClear}>Clear</button>
+            </div>
            </div>
         </div>
       <div/>
@@ -181,24 +183,28 @@ export default class StepSequencer extends Component {
   }
 
   onHit(l, c) {
-    log('onHit: ', l, ' ', c)
-    let dp = this.state.drumsPatterns;
+    const dp = this.state.drumsPatterns;
     dp[l][c] = !dp[l][c]
-    // this.logDrumPatterns(dp);
     this.setState({drumsPatterns: dp})
   }
 
+  onClear() {
+    this.setState({
+      drumsPatterns: EMPTY_DRUM_PATTERN(),
+      bassNPatterns: EMPTY_SYNTH_PATTERN(),
+      leadNPatterns: EMPTY_SYNTH_PATTERN()
+    })  
+  }
+
   onExport() {
-    // log('Should export to midi!')
-    
     const track = new MidiWriter.Track();
     let events = [];
     for (let col = 0 ; col <= 8 ; col ++) {
       let pitches = []
-      for (let i = 0 ; i < majorScale.length; i ++) {
+      for (let i = 0 ; i < MAJOR_SCALE.length; i ++) {
         if (this.state.bassNPatterns[i][col]) {
           // log('i,col: ', i, ' ', col)
-          const note = majorScale[i];
+          const note = MAJOR_SCALE[i];
           const noteAndOctave = note + '2';
           pitches.push(noteAndOctave)
         }
@@ -260,15 +266,15 @@ export default class StepSequencer extends Component {
   }
 
   startPlay() {
-  this.loop.start()
-  Tone.Transport.start()
-  this.setState({playing: true})
+    this.loop.start()
+    Tone.Transport.start()
+    this.setState({playing: true})
   }
 
   stopPlay() {
-  this.loop.stop()
-  this.setState({pbCol: -1})
-  this.setState({playing: false})
+    this.loop.stop()
+    this.setState({pbCol: -1})
+    this.setState({playing: false})
   }
 
 }

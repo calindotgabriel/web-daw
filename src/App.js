@@ -18,10 +18,10 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="">
+      <div>
         <header className="App-header">
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          <h2 className="title">Rhytmicinno SoundBox</h2>
+          <h2 className="title">Shiko Sound Machine</h2>
         </header>
         <StepSequencer/>
       </div>

@@ -3,17 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "browserify-fs": "^1.0.0",
     "classnames": "^2.2.6",
-    "fs": "^0.0.1-security",
     "js-file-download": "^0.4.1",
     "midi-writer-js": "^1.5.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-tabs": "^2.2.2",
     "tone": "^0.11.11"
   },
   "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
     "react-scripts": "1.1.1"
   },
   "scripts": {

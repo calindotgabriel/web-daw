@@ -154,3 +154,7 @@ body {
   color: #417378;
   cursor: pointer;
 }
+
+#btn-clear {
+  margin: 6px 16px;
+}
