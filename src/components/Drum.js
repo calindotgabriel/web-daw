@@ -13,10 +13,10 @@ export class Drum extends Component {
   render() {
     return (
       <div className="row drum">
-          <div className="col-lg-1 drum-label">
+          <div className="col drum-label">
               {this.props.name}
         </div>
-        <div className="col-lg-11 boxes">
+        <div className="col-12 boxes">
         {Array(16).fill(0).map((j, i) => { 
             return <Box i={i} key={i} onToggle={this.onToggleBox} 
                         hit={this.props.pattern[i]} 
