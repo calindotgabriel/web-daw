@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bulma": "^0.7.4",
     "classnames": "^2.2.6",
     "js-file-download": "^0.4.1",
     "midi-writer-js": "^1.5.2",

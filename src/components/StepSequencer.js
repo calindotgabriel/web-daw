@@ -120,30 +120,27 @@ export default class StepSequencer extends Component {
   render() {
     let playingClass = this.state.playing ? "viewing" : "";
     return (
-      <div id="sequencer" className="container-fluid">
-        <div className="containerBox"> 
-          <div className="row controls">
-              <div className="col-10">
-              <div className={playingClass}>
-                <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
-                <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
-              </div>
-              </div>
-              <div className="col-2">
-                <div className="form-group">
-                  <label> BPM: </label>
+      <div id="sequencer" className="container">
+          <div className="controls">
+              <div className={`${playingClass} columns is-mobile`}>
+                <div className="column is-one-fifth-mobile is-one-third-tablet">
+                  <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
+                  <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
+                </div>
+                <div className="form-group column">
+                  <label>BPM:</label>
                   <input value={this.state.bpm} className={classNames('form-control', {'bpm-err' : this.state.bpmError})} onChange={this.onChangeBpm}/>
                 </div>
               </div>
           </div>
           
-          <div className="row sequencer">
-            <ul className="nav nav-pills container instruments" role="tablist">
-              <li className="nav-item"><a data-toggle="pill"
-                href="#DRUMS" className="nav-link active" aria-selected="true">DRUMS</a></li>
-              <li className="nav-item"><a data-toggle="pill"
+          <div className="sequencer">
+            <ul className="columns is-mobile" role="tablist">
+              <li className="nav-item column is-one-fifth"><a data-toggle="pill"
+                href="#drums" className="nav-link active" aria-selected="true">DRUMS</a></li>
+              <li className="nav-item column is-one-fifth"><a data-toggle="pill"
                 href="#bass" className="nav-link" aria-selected="false">BASS</a></li>
-              <li className="nav-item"><a data-toggle="pill" 
+              <li className="nav-item column is-one-fifth"><a data-toggle="pill" 
                 href="#lead" className="nav-link" aria-selected="false">LEAD</a></li>
             </ul>
             <div className="tab-content">
@@ -177,8 +174,6 @@ export default class StepSequencer extends Component {
             </div>
            </div>
         </div>
-      <div/>
-      </div>
     )
   }
 

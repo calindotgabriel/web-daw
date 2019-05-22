@@ -3,7 +3,6 @@ import Box from './Box'
 
 let log = console.log;
 
-
 export class Drum extends Component {
     constructor(props) {
         super(props);        
@@ -12,16 +11,18 @@ export class Drum extends Component {
 
   render() {
     return (
-      <div className="row drum">
-          <div className="col drum-label">
-              {this.props.name}
+      <div className="drum columns is-mobile">
+          <div className="drum-label column is-1">
+              <span>{this.props.name}</span>
         </div>
-        <div className="col-12 boxes">
+        <div className="boxes column">
         {Array(16).fill(0).map((j, i) => { 
-            return <Box i={i} key={i} onToggle={this.onToggleBox} 
-                        hit={this.props.pattern[i]} 
-                        color={this.props.color}
-                        pbCol={this.props.pbCol}></Box>
+            return <Box i={i} key={i} 
+                      onToggle={this.onToggleBox} 
+                      hit={this.props.pattern[i]} 
+                      color={this.props.color}
+                      pbCol={this.props.pbCol}>
+                    </Box>
             })}
         </div>
       </div>
@@ -30,13 +31,6 @@ export class Drum extends Component {
 
   onToggleBox(rowIndex) {
       this.props.onHit(this.props.i, rowIndex)
-    }
-
-    shouldComponentUpdate() {
-      // if (this.props.pbCol == this.props.i) return true;
-      // if (this.props.hit) return true;
-      // return false;
-      return true;
   }
 }
 
