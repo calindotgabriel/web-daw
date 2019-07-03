@@ -3,14 +3,11 @@ import './App.css';
 
 import StepSequencer from './components/StepSequencer'
 
-import Tone from 'tone';
-
 let log = console.log;
 
 
 // 16 * 16 sixteen notes = 1 measure
 // 2 * 8 eighteen notes = 2 measures ( pace slowed ) 
-
 
 class App extends Component {
   constructor(props) {
@@ -18,13 +15,22 @@ class App extends Component {
   }
   render() {
     return (
-      <div>
-        <header className="App-header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          <h2 className="title">Shiko Sound Machine</h2>
-        </header>
-        <StepSequencer/>
-      </div>
+      <section className="hero is-info is-fullheight">
+        <div className="hero-head">
+          <div className="navbar">
+            <div className="container">
+              <div className="navbar-brand">
+                <div className="navbar-item">
+                  Rhytmicinnø
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="hero-body">
+          <StepSequencer/>
+        </div>
+      </section>
     );
   }
 }

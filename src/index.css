@@ -6,7 +6,7 @@ body {
 }
 
 .cell {
-  float: left;
+  /* float: left; */
   padding: 3px;
   /* background-color: '#D7DCF2'; */
   background-color: grey;
@@ -34,15 +34,11 @@ body {
 }
 
 #sequencer {
-  margin: 15px;
   /* background: rgb(163, 163, 163); */
-  background: rgb(250, 252, 240);
-  overflow: auto;
-  text-align: left;
+  background: #fafcf0;
   padding: 1em;
-  padding-left: 1.5em;
+  /* padding-left: 1.5em; */
   box-shadow: 4px 3px 4px #3E423A;
-  width: 1500px;
 }
 
 .controls {
@@ -55,10 +51,6 @@ body {
   color: #3E423A;
 }
 
-.sequencer {
-  overflow: hidden;
-  padding-left: 1em;
-}
 
 .numbers {
   letter-spacing: 6px;
@@ -106,11 +98,20 @@ body {
   background-color: #F1DE98;
 }
 
-.form-control {
+.bpm-label {
+  color: black;
+  margin: 8px 8px 0 0;
+}
+
+.input {
   background: rgb(250, 252, 240);
 }
 
-.form-control:focus {
+.tabs {
+  color: black;
+}
+
+.input:focus {
 	/* color: #417378; */
 	/* border-color: #417378; */
 	box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
@@ -150,3 +151,8 @@ body {
 #btn-clear {
   margin: 6px 16px;
 }
+
+.drum-label {
+  color:black;
+}
+

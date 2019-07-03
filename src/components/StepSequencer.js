@@ -42,7 +42,6 @@ const snare = {
 }
 export const DRUMS = [ kick, clap, hhat, ohat, snare ]
 
-
 const drumPaths = DRUMS.reduce((map, d) => {
   map[d.name] = d.path;
   return map;
@@ -71,9 +70,12 @@ const leadSynth = new Tone.FMSynth({
 }).toMaster();
 
 
-const MAJOR_SCALE = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 const EMPTY_DRUM_PATTERN = () => Array(DRUMS.length).fill(0).map(() => Array(PULSES.length).fill(0))
+const MAJOR_SCALE = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 const EMPTY_SYNTH_PATTERN = () => MAJOR_SCALE.map(() => Array(PULSES.length).fill(0));
+const TAB_DRUMS = "DRUMS";
+const TAB_BASS = "BASS";
+const TAB_LEAD = "LEAD";
 
 export default class StepSequencer extends Component {
   constructor(props) {
@@ -82,6 +84,7 @@ export default class StepSequencer extends Component {
         drumsPatterns: EMPTY_DRUM_PATTERN(),
         bassNPatterns: EMPTY_SYNTH_PATTERN(),
         leadNPatterns: EMPTY_SYNTH_PATTERN(),
+        activeTab: TAB_DRUMS
       }
       this.loop = new Tone.Sequence((time, col) => {
         for (let i = 0 ; i < DRUMS.length ; i ++) {
@@ -114,56 +117,68 @@ export default class StepSequencer extends Component {
     this.onLeadNote = this.onLeadNote.bind(this);
     this.onExport = this.onExport.bind(this);
     this.onClear = this.onClear.bind(this);
+    this.handleTab = this.handleTab.bind(this);
   }
-  
+  handleTab(tab) {
+    console.log("handleTab!!", tab);
+    // if (tab === TAB_DRUMS) {
+    this.setState({ activeTab: tab})
+    // }
+  }
 
   render() {
     let playingClass = this.state.playing ? "viewing" : "";
+    const drumsTabActive = this.state.activeTab === TAB_DRUMS;
+    const bassTabActive = this.state.activeTab === TAB_BASS;
+    const leadTabActive = this.state.activeTab === TAB_LEAD;
     return (
-      <div id="sequencer" className="container">
+      <div id="sequencer" className="container is-fluid">
           <div className="controls">
               <div className={`${playingClass} columns is-mobile`}>
-                <div className="column is-one-fifth-mobile is-one-third-tablet">
+                {/* <div className="column is-one-fifth-mobile is-one-third-tablet"> */}
+                <div className="column is-2">
                   <i onClick={() => { this.startPlay()}} className="material-icons">play_arrow</i>
                   <i onClick={() => { this.stopPlay()}} className="material-icons">stop</i>
                 </div>
-                <div className="form-group column">
-                  <label>BPM:</label>
-                  <input value={this.state.bpm} className={classNames('form-control', {'bpm-err' : this.state.bpmError})} onChange={this.onChangeBpm}/>
+                <div className="form-group column is-10">
+                  <div className="is-pulled-right columns is-mobile">
+                    <label className="bpm-label tag is-black column is-3 is-offset-3 ">BPM</label>
+                    <input value={this.state.bpm} type="text" placeholder="120" className=
+                    {classNames('input column is-3', {'bpm-err' : this.state.bpmError})} onChange={this.onChangeBpm}/>
+                  </div>
                 </div>
               </div>
           </div>
-          
           <div className="sequencer">
-            <ul className="columns is-mobile" role="tablist">
+            <ul className="tabs is-boxed columns is-mobile" role="tablist">
+              <li className="tab column is-one-fifth is-black"><a data-toggle="pill"
+                onClick={() => this.handleTab(TAB_DRUMS)} className="nav-link active" aria-selected="true">DRUMS</a></li>
               <li className="nav-item column is-one-fifth"><a data-toggle="pill"
-                href="#drums" className="nav-link active" aria-selected="true">DRUMS</a></li>
-              <li className="nav-item column is-one-fifth"><a data-toggle="pill"
-                href="#bass" className="nav-link" aria-selected="false">BASS</a></li>
+                onClick={() => this.handleTab(TAB_BASS)} className="nav-link" aria-selected="false">BASS</a></li>
               <li className="nav-item column is-one-fifth"><a data-toggle="pill" 
-                href="#lead" className="nav-link" aria-selected="false">LEAD</a></li>
+                onClick={() => this.handleTab(TAB_LEAD)} className="nav-link" aria-selected="false">LEAD</a></li>
             </ul>
             <div className="tab-content">
-              <div className="tab pane fade show active" id="DRUMS" role="tabpanel" aria-labelledby="DRUMS">
-                
-              <DrumBox drums={DRUMS} pbCol={this.state.pbCol} onHit={this.onHit}
-                drumsPatterns={this.state.drumsPatterns}/>
-              {/* {this.state.playing ? "playing" : "not playing"} */}
-
-              </div>
-              <div className="tab pane fade" id="bass" role="tabpanel" aria-labelledby="bass">
-                
-                <BassBox notesPatterns={this.state.bassNPatterns} pbCol={this.state.pbCol}
-                  onNote={this.onBassNote} />
-
-              </div>
-              <div className="tab pane fade" id="lead" role="tabpanel" aria-labelledby="lead">
+              {drumsTabActive && (
+                <div className={classNames("tab")} id="DRUMS" role="tabpanel" aria-labelledby="DRUMS">
+                  <DrumBox drums={DRUMS} pbCol={this.state.pbCol} onHit={this.onHit}
+                    drumsPatterns={this.state.drumsPatterns}/>
+                </div>
+              )}
+              {bassTabActive && (
+                <div className="tab" id="bass" role="tabpanel" aria-labelledby="bass">
+                  <BassBox notesPatterns={this.state.bassNPatterns} pbCol={this.state.pbCol}
+                    onNote={this.onBassNote} />
+                </div>
+              )}
+              {leadTabActive && (
+                <div className="tab" id="lead" role="tabpanel" aria-labelledby="lead">
                 <LeadBox 
                   notesPatterns = {this.state.leadNPatterns}
                   pbCol={this.state.pbCol}
                   onNote={this.onLeadNote} />
               </div>
-
+              )}
             </div>
            </div> 
 
@@ -237,19 +252,15 @@ export default class StepSequencer extends Component {
 
 
   onChangeBpm(e) {
-    log('bpm: ', e.target.value)
-    this.setBpm(e.target.value)
-  }
-
-  setBpm(bpm) {
-    this.setState({bpm: bpm})
+    const bpm = e.target.value;
     if (bpm < 5 || bpm > 200) {
-      this.setState({bpmError: true})
+      this.setState({bpm, bpmError: true})
       return;
     }
-    this.setState({bpmError: false})
+    this.setState({bpm, bpmError: false})
     Tone.Transport.bpm.value = bpm;
   }
+
 
   logDrumPatterns(a) {
     // let a = this.state.drumsPatterns;

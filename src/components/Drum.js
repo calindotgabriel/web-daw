@@ -16,14 +16,16 @@ export class Drum extends Component {
               <span>{this.props.name}</span>
         </div>
         <div className="boxes column">
-        {Array(16).fill(0).map((j, i) => { 
-            return <Box i={i} key={i} 
-                      onToggle={this.onToggleBox} 
-                      hit={this.props.pattern[i]} 
-                      color={this.props.color}
-                      pbCol={this.props.pbCol}>
-                    </Box>
-            })}
+          <div className="columns is-mobile">
+            {Array(16).fill(0).map((j, i) => { 
+                return <Box i={i} key={i} 
+                          onToggle={this.onToggleBox} 
+                          hit={this.props.pattern[i]} 
+                          color={this.props.color}
+                          pbCol={this.props.pbCol}>
+                        </Box>
+                })}
+            </div>
         </div>
       </div>
     )

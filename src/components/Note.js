@@ -12,11 +12,11 @@ export class Note extends Component {
 
   render() {
     return (
-      <div className="row">
-          <div className="col-lg-1 ">
+      <div className="columns is-mobile">
+          <div className="column is-2">
               {this.props.note}
         </div>
-        <div className="col-lg-11 boxes">
+        <div className="column is-10">
         {Array(16).fill(0).map((j, i) => { 
             // return <
             return <Box i={i} onToggle={this.onToggleBox} 
