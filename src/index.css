@@ -23,7 +23,6 @@ body {
 
 .label {
   float: left;
-  margin-right: 4px;  
   position: relative;
   top: 8px;
 }
@@ -149,10 +148,19 @@ body {
 }
 
 #btn-clear {
-  margin: 6px 16px;
+  /* margin: 6px 16px; */
+  margin-right: 8px;
+  text-transform: uppercase;
 }
 
-.drum-label {
+.label:not(:last-child) { 
   color:black;
+  margin-bottom: 0;
+}
+.label {
+  /* padding: 0; */
 }
 
+.boxes {
+  /* padding: 0; */
+}

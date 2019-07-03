@@ -182,10 +182,10 @@ export default class StepSequencer extends Component {
             </div>
            </div> 
 
-           <div className="row midi">
-            <div className="float-right"> 
-              <span onClick={this.onExport}>Export to MIDI</span> 
-              <button id="btn-clear" className="btn btn-info" onClick={this.onClear}>Clear</button>
+           <div className="columns">
+            <div className="column is-12"> 
+              <span className="button is-pulled-right" onClick={this.onExport}>Export to MIDI</span> 
+              <button id="btn-clear" className="button is-pulled-right" onClick={this.onClear}>Clear</button>
             </div>
            </div>
         </div>

@@ -16,12 +16,13 @@ export default class BassBox extends Component {
     return (
       <div>
           {majorScale.map((n, i) => {
-                  return <Note note={n} key={i} i={i}
-                               pbCol={this.props.pbCol}
-                               onNote={this.props.onNote}
-                               pattern={this.props.notesPatterns[i]}
-                  />
-                })}
+            return (
+              <Note note={n} key={i} i={i}
+                pbCol={this.props.pbCol}
+                onNote={this.props.onNote}
+                pattern={this.props.notesPatterns[i]}
+              />)
+          })}
       </div>
     )
   }

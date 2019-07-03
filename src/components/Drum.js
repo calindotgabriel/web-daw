@@ -12,7 +12,7 @@ export class Drum extends Component {
   render() {
     return (
       <div className="drum columns is-mobile">
-          <div className="drum-label column is-1">
+          <div className="label column is-1">
               <span>{this.props.name}</span>
         </div>
         <div className="boxes column">

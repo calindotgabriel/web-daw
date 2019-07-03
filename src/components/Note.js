@@ -13,8 +13,8 @@ export class Note extends Component {
   render() {
     return (
       <div className="columns is-mobile">
-          <div className="column is-2">
-              {this.props.note}
+        <div className="column is-2 label">
+            {this.props.note}
         </div>
         <div className="column is-10">
         {Array(16).fill(0).map((j, i) => { 
