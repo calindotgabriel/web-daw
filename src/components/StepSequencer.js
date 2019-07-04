@@ -150,8 +150,8 @@ export default class StepSequencer extends Component {
               </div>
           </div>
           <div className="sequencer">
-            <ul className="tabs is-boxed columns is-mobile" role="tablist">
-              <li className="tab column is-one-fifth is-black"><a data-toggle="pill"
+            <ul className="tabs columns is-mobile" role="tablist">
+              <li className="tab is-boxed column is-one-fifth is-black"><a data-toggle="pill"
                 onClick={() => this.handleTab(TAB_DRUMS)} className="nav-link active" aria-selected="true">DRUMS</a></li>
               <li className="nav-item column is-one-fifth"><a data-toggle="pill"
                 onClick={() => this.handleTab(TAB_BASS)} className="nav-link" aria-selected="false">BASS</a></li>
@@ -160,7 +160,7 @@ export default class StepSequencer extends Component {
             </ul>
             <div className="tab-content">
               {drumsTabActive && (
-                <div className={classNames("tab")} id="DRUMS" role="tabpanel" aria-labelledby="DRUMS">
+                <div className="tab" id="DRUMS" role="tabpanel" aria-labelledby="DRUMS">
                   <DrumBox drums={DRUMS} pbCol={this.state.pbCol} onHit={this.onHit}
                     drumsPatterns={this.state.drumsPatterns}/>
                 </div>
