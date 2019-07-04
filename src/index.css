@@ -157,3 +157,11 @@ body {
   color:black;
   margin-bottom: 0;
 }
+
+/* .drum .columns {
+  margin: 0;
+} */
+
+.tab-content .columns {
+  margin: 0;
+}

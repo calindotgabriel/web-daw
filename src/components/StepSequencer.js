@@ -1,81 +1,23 @@
 import React, { Component } from 'react'
- 
+import classNames from 'classnames';
+import fileDownload from 'js-file-download';
+import MidiWriter from 'midi-writer-js';
+import Tone from 'tone';
+
 import DrumBox from './DrumBox'
 import BassBox from './BassBox'
 import LeadBox from './LeadBox'
 
-import Tone from 'tone';
-
-import classNames from 'classnames';
-
-import fileDownload from 'js-file-download';
-import MidiWriter from 'midi-writer-js';
+import { TAB_DRUMS, TAB_BASS, TAB_LEAD, BPM, TIMELINE, DRUMS } from "../lib/audio";
+import { drumKeys, synth, leadSynth } from "../lib/audio";
 
 let log = console.log;
 
-const BPM = 120;
-Tone.Transport.bpm.value = BPM;
 
-const kick = {
-  name: "Kick",
-  path: "./res/kick.wav",
-  color: 'red'
-}
-const clap = {
-  name: "Clap",
-  path: "./res/clap2.wav",
-  color: 'orange'
-}
-const hhat = {
-  name: "CHat",
-  path: "./res/chhat.wav",
-  color: 'green'
-}
-const ohat = {
-  name: "OHat",
-  path: "./res/ohhat.wav",
-  color: 'blueviolet'
-}
-const snare = {
-  name: "Snare",
-  path: "./res/snare2.wav",
-}
-export const DRUMS = [ kick, clap, hhat, ohat, snare ]
-
-const drumPaths = DRUMS.reduce((map, d) => {
-  map[d.name] = d.path;
-  return map;
-}, {});
-
-const gain = new Tone.Gain(0.35)  
-const drumKeys = new Tone.Players(drumPaths, () => { log('loaded DRUMS') })
-drumKeys.connect(gain)
-gain.toMaster();
-
-const PULSES = [0, 1, 2, 3, 4, 5, 6, 7, 8,9 , 10 , 11, 12 , 13 , 14, 15]
-
-const synth = new Tone.Synth().toMaster();
-const leadSynth = new Tone.FMSynth({
-  "envelope" : {
-    "attack" : 0.8,
-    "decay" : 0.7
-  },
-  "modulation" : {
-    "type" : "square"
-  },
-  "modulationEnvelope" : {
-    "attack" : 0.2,
-    "decay" : 0.01
-  }
-}).toMaster();
-
-
-const EMPTY_DRUM_PATTERN = () => Array(DRUMS.length).fill(0).map(() => Array(PULSES.length).fill(0))
+const EMPTY_DRUM_PATTERN = () => Array(DRUMS.length).fill(0).map(() => Array(TIMELINE.length).fill(0))
 const MAJOR_SCALE = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
-const EMPTY_SYNTH_PATTERN = () => MAJOR_SCALE.map(() => Array(PULSES.length).fill(0));
-const TAB_DRUMS = "DRUMS";
-const TAB_BASS = "BASS";
-const TAB_LEAD = "LEAD";
+const EMPTY_SYNTH_PATTERN = () => MAJOR_SCALE.map(() => Array(TIMELINE.length).fill(0));
+
 
 export default class StepSequencer extends Component {
   constructor(props) {
@@ -94,10 +36,8 @@ export default class StepSequencer extends Component {
         }
         for (let i = 0 ; i < MAJOR_SCALE.length; i ++) {
           if (this.state.bassNPatterns[i][col]) {
-            // log('i,col: ', i, ' ', col)
             const note = MAJOR_SCALE[i];
             const noteAndOctave = note + '2';
-            // log('nAOc: ', noteAndOctave)
             synth.triggerAttackRelease(noteAndOctave, "16n")
           }
           if (this.state.leadNPatterns[i][col]) {
@@ -108,8 +48,7 @@ export default class StepSequencer extends Component {
           }
         }
         this.setState({pbCol: col})
-        // log('pbcol: ', col)
-        }, PULSES, "16n");
+        }, TIMELINE, "16n");
       
     this.onChangeBpm = this.onChangeBpm.bind(this);
     this.onHit = this.onHit.bind(this);
@@ -151,11 +90,14 @@ export default class StepSequencer extends Component {
           </div>
           <div className="sequencer">
             <ul className="tabs columns is-mobile" role="tablist">
-              <li className="tab is-boxed column is-one-fifth is-black"><a data-toggle="pill"
+              <li className={classNames("tab is-boxed column is-one-fifth is-black",
+                {"is-active": drumsTabActive})}><a data-toggle="pill"
                 onClick={() => this.handleTab(TAB_DRUMS)} className="nav-link active" aria-selected="true">DRUMS</a></li>
-              <li className="nav-item column is-one-fifth"><a data-toggle="pill"
+              <li className={classNames("nav-item column is-one-fifth", 
+                {"is-active": bassTabActive})}><a data-toggle="pill"
                 onClick={() => this.handleTab(TAB_BASS)} className="nav-link" aria-selected="false">BASS</a></li>
-              <li className="nav-item column is-one-fifth"><a data-toggle="pill" 
+              <li className={classNames("nav-item column is-one-fifth", 
+                {"is-active": leadTabActive})}><a data-toggle="pill" 
                 onClick={() => this.handleTab(TAB_LEAD)} className="nav-link" aria-selected="false">LEAD</a></li>
             </ul>
             <div className="tab-content">
