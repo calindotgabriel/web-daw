@@ -63,18 +63,10 @@ gain.toMaster();
 const sequence = [0, 1, 2, 3, 4, 5, 6, 7, 8,9 , 10 , 11, 12 , 13 , 14, 15]
 
 const synth = new Tone.Synth().toMaster();
-const leadSynth = new Tone.FMSynth({
-  "envelope" : {
-    "attack" : 0.8,
-    "decay" : 0.7
-  },
-  "modulation" : {
-    "type" : "square"
-  },
-  "modulationEnvelope" : {
-    "attack" : 0.2,
-    "decay" : 0.01
-  }
+const leadSynth = new Tone.AMSynth({
+    modulation: {
+        type: 'triangle',
+    }
 }).toMaster();
 
 export default class StepSequencer extends Component {
@@ -141,11 +133,11 @@ export default class StepSequencer extends Component {
           <div className="row sequencer">
             <ul className="nav nav-pills container instruments" role="tablist">
               <li className="nav-item"><a data-toggle="pill"
-                href="#drums" className="nav-link active" aria-selected="true">DRUMS</a></li>
+                href="#drums" className="nav-link active">DRUMS</a></li>
               <li className="nav-item"><a data-toggle="pill"
-                href="#bass" className="nav-link" aria-selected="false">BASS</a></li>
+                href="#bass" className="nav-link" >BASS</a></li>
               <li className="nav-item"><a data-toggle="pill" 
-                href="#lead" className="nav-link" aria-selected="false">LEAD</a></li>
+                href="#lead" className="nav-link">LEAD</a></li>
             </ul>
             <div className="tab-content">
               <div className="tab pane fade show active" id="drums" role="tabpanel" aria-labelledby="drums">
