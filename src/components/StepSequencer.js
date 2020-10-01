@@ -63,11 +63,7 @@ gain.toMaster();
 const sequence = [0, 1, 2, 3, 4, 5, 6, 7, 8,9 , 10 , 11, 12 , 13 , 14, 15]
 
 const synth = new Tone.Synth().toMaster();
-const leadSynth = new Tone.AMSynth({
-    modulation: {
-        type: 'triangle',
-    }
-}).toMaster();
+const leadSynth = new Tone.AMSynth().toMaster();
 
 export default class StepSequencer extends Component {
   constructor(props) {
